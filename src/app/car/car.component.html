@@ -1,0 +1,42 @@
+
+<mat-card   class="car-card" >
+  <mat-card-header>
+    <mat-card-title>{{ car?.model }}</mat-card-title>
+    <mat-card-subtitle>{{ car?.color }}</mat-card-subtitle>
+  </mat-card-header>
+
+
+  
+  <mat-card-content>
+    <p><strong>Date:</strong> {{ car?.date | date:'shortDate' }}</p>
+  </mat-card-content>
+
+  <mat-card-content>
+  <p><strong>Price:</strong> {{ car?.price | currency }}</p>
+</mat-card-content>
+
+<mat-card-content>
+  <img
+    [src]="car?.image || 'https://via.placeholder.com/400x200?text=No+Image'"
+    alt="{{ car?.model }}"
+    class="car-image"
+  />
+</mat-card-content>
+
+  <mat-card-actions>
+
+    <div class="details-button-container"
+       (mouseenter)="showDetails = true"
+       (mouseleave)="showDetails = false">
+    <button (click)="onDetailsClik()" mat-raised-button color="accent" [matTooltip]="'Model: ' + car?.details ">Details</button>
+    <div class="details-popup">
+      @if(showDetails && car?.details){
+        <p><strong>Details:</strong> {{ car?.details }}</p>
+      }
+    </div>
+  </div>
+
+    <button mat-stroked-button color="primary" (click)="onEditClick()">Edit</button>
+ <button mat-stroked-button color="warn" (click)="onDeleteClick()">Delete</button>
+  </mat-card-actions>
+</mat-card>

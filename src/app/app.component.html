@@ -1,0 +1,19 @@
+
+ <nav style="padding: 1rem; background: #1976d2; color: white;">
+  <a routerLink="/cars" routerLinkActive="active"
+     style="color: white; text-decoration: none; margin-right: 1rem;">
+     🚗 Cars
+  </a>
+
+  <a routerLink="/trucks" routerLinkActive="active"
+     style="color: white; text-decoration: none;">
+     🚛 Trucks
+  </a>
+</nav>
+<router-outlet></router-outlet>
+<!-- Loading spinner -->
+@if (loadingService.loading()) {
+  <div class="spinner-overlay">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+}
