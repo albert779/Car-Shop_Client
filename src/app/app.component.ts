@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CarListComponent } from './car-list.component/car-list.component';
+import { CarListComponent } from './car/car-list.component/car-list.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LoadingService } from '../services/loading.service';
 import { RouterLink, RouterOutlet } from '@angular/router';

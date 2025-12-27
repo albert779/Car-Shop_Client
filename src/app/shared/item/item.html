@@ -1,0 +1,33 @@
+<mat-card class="car-card">
+  <mat-card-header>
+    <mat-card-title>{{ itemInfo.model }}</mat-card-title>
+    <mat-card-subtitle>{{ itemInfo.color }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p><strong>Date:</strong> {{ itemInfo.date | date:'shortDate' }}</p>
+  </mat-card-content>
+
+  <mat-card-content>
+    <p><strong>Price:</strong> {{ itemInfo.price | currency }}</p>
+  </mat-card-content>
+
+  <mat-card-content>
+    <img
+      [src]="itemInfo.image|| 'https://via.placeholder.com/400x200?text=No+Image'"
+      alt="{{ itemInfo.model }}"
+      class="car-image"
+    />
+  </mat-card-content>
+
+  <mat-card-actions>
+    <!-- Details popup like car -->
+    <!-- Buttons -->
+    <button mat-stroked-button color="primary" (click)="onEditClick()">Edit</button>
+    <button mat-stroked-button color="warn" (click)="onDeleteClick()">Delete</button>
+    <button mat-raised-button color="accent" (click)="onDetails()">
+  Details
+</button>
+  </mat-card-actions>
+</mat-card>
+

@@ -1,0 +1,22 @@
+<h2 style="text-align:center;">🚛 Truck List</h2>
+
+
+
+<button mat-raised-button color="primary" (click)="addTruck()">
+  Add Truck
+</button>
+
+<ul class="car-list">
+@for (truck of trucks(); track truck.id){
+   <li>
+      <app-item
+        [itemInfo]="truck"
+        (edit)="editTruck($event)"
+        (delete)="deleteTruck($event)"
+         (viewDetails)="detailsTruck($event)"
+        >
+      </app-item>
+    </li>
+ }
+
+</ul>

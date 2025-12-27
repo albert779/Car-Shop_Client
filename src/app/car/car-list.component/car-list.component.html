@@ -1,0 +1,22 @@
+<!--<div class="car-list-container">-->
+
+<h2 style="text-align: center;">Car List</h2>
+
+<button mat-raised-button color="primary" (click)="addCar()">Add Car</button>
+
+
+<ul class="car-list">
+@for (car of cars(); track car.id){
+   <li>
+      <app-item
+        [itemInfo]="car"
+        (edit)="editCar($event)"
+       (delete)="deleteCar($event)"
+       (viewDetails)="detailsCar($event)"
+        >
+      </app-item>
+    </li>
+ }
+
+
+</ul>

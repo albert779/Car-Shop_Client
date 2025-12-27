@@ -1,0 +1,49 @@
+.car-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Row for cards — for future use if needed */
+.cards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* === CAR GRID (3 per row) === */
+.car-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  max-width: 1400px; /* optional: limit width */
+}
+
+/* === GLOBAL LOADER CENTERED IN SCREEN === */
+.loader-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* user can’t click loader */
+}

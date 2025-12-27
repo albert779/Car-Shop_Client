@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { MyCar } from '../car/myCar'; // adjust path
+import { MyCar } from '../../car/myCar'; // adjust path
 
 @Component({
   selector: 'app-car-details-dialog',

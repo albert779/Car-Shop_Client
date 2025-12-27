@@ -1,0 +1,93 @@
+<div class="auth-container">
+
+  <h2>Register</h2>
+
+  <form [formGroup]="regForm">
+
+    <!--
+     <mat-form-field appearance="outline">
+      <mat-label>Id</mat-label>
+      <input matInput formControlName="id">
+      <mat-error *ngIf="regForm.get('id')?.invalid && submitted">
+        Name is required.
+      </mat-error>
+    </mat-form-field>
+  -->
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="regForm.get('name')?.invalid && submitted">
+        Name is required.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastname">
+      <mat-error *ngIf="regForm.get('lastname')?.invalid && submitted">
+        Last Name is required.
+      </mat-error>
+    </mat-form-field>
+
+     <mat-form-field appearance="outline">
+      <mat-label>Birth Date</mat-label>
+      <input matInput formControlName="birthdate">
+      <mat-error *ngIf="regForm.get('birthdate')?.invalid && submitted">
+        Last Name is required.
+      </mat-error>
+    </mat-form-field>
+
+    <!--
+    <mat-form-field appearance="outline">
+      <mat-label>Date</mat-label>
+      <input matInput formControlName="date">
+      <mat-error *ngIf="regForm.get('date')?.invalid && submitted">
+        Last Name is required.
+      </mat-error>
+    </mat-form-field>
+  -->
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone">
+      <mat-error *ngIf="regForm.get('phone')?.invalid && submitted">
+        Last Name is required.
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+      <mat-error *ngIf="regForm.get('email')?.invalid && submitted">
+        Enter a valid email.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password">
+      <mat-error *ngIf="regForm.get('password')?.invalid && submitted">
+        Password is required.
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="submit()">
+      Register
+    </button>
+
+    <!--
+    <div class="login-link">
+       <a routerLink="/login">Already have an account? Login</a>
+    </div>
+  -->
+
+  
+  </form>
+
+  <button mat-button color="primary" routerLink="/login">
+     Already have an account? Login
+  </button>
+
+</div>
