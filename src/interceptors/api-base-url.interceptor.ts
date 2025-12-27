@@ -1,0 +1,13 @@
+import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { environment } from '../environments/environment';
+
+export const apiBaseUrlInterceptor: HttpInterceptorFn = 
+(req:HttpRequest<unknown>, next: HttpHandlerFn) => {
+  // Only modify relative URLs (don’t touch absolute ones)
+  if (!req.url.startsWith('http')) {
+    req = req.clone({
+      url: `${environment.apiBaseUrl}/${req.url}`
+    });
+  }
+  return next(req);
+};

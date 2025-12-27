@@ -1,0 +1,26 @@
+.add-car-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 80%;
+  padding: 16px;
+}
+
+.image-upload {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+.image-preview img {
+      width: 80px;
+ }
+
+.image-upload button {
+  min-width: 140px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
