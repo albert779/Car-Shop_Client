@@ -33,7 +33,7 @@ export class RegisterComponent {
   ) {
     // ✅ Initialize the form here, after fb is available
     this.regForm = this.fb.group({
-     // id: ['', Validators.required],
+      id: ['', Validators.required],
       name: ['', Validators.required],
       lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
