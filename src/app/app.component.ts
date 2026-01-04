@@ -1,10 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { AuthService } from './auth/auth';
+import { Component } from '@angular/core';
+//import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CarListComponent } from './car/car-list.component/car-list.component';
-import { MatToolbarModule } from '@angular/material/toolbar';
+//import { CarListComponent } from './car/car-list.component/car-list.component';
+//import { MatToolbarModule } from '@angular/material/toolbar';
 import { LoadingService } from '../services/loading.service';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router,RouterLink, RouterOutlet } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 
 
@@ -18,5 +21,5 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 export class AppComponent {
   title = 'App Component';
-  constructor(public loadingService: LoadingService) {}
+  constructor(public loadingService: LoadingService,public auth: AuthService,public router: Router  ) {}
 }

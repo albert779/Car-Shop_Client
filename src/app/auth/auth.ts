@@ -6,13 +6,19 @@ import { tap } from 'rxjs';
 export class AuthService {
 
   private api = 'http://localhost:5104/api/auth';
+  private readonly TOKEN_KEY = 'token';
+
+   //isLoggedInSignal = signal<boolean>(!!localStorage.getItem(this.TOKEN_KEY));
 
   constructor(private http: HttpClient) {}
 
   login(data: { email: string; password: string }) {
-    return this.http.post<any>(`${this.api}/login`, data).pipe(
+    //return this.http.post<any>(`${this.api}/login`, data).pipe(
+    return this.http.post<{ token: string }>(`${this.api}/login`, data).pipe(
       tap(res => {
-        localStorage.setItem('token', res.token);
+        //localStorage.setItem('token', res.token);
+        localStorage.setItem(this.TOKEN_KEY, res.token);
+        
       })
     );
   }
@@ -22,10 +28,18 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    //localStorage.removeItem('token');
+    localStorage.removeItem(this.TOKEN_KEY);
+    
   }
 
   isLoggedIn() {
-    return !!localStorage.getItem('token');
+    //return !!localStorage.getItem('token');
+    //return this.isLoggedInSignal();
+    return !!localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 }

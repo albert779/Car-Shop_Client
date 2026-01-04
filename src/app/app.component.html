@@ -1,4 +1,8 @@
-
+@if (
+  auth.isLoggedIn() &&
+  !router.url.startsWith('/login') &&
+  !router.url.startsWith('/register')
+) {
  <nav style="padding: 1rem; background: #1976d2; color: white;">
   <a routerLink="/cars" routerLinkActive="active"
      style="color: white; text-decoration: none; margin-right: 1rem;">
@@ -10,6 +14,7 @@
      🚛 Trucks
   </a>
 </nav>
+}
 <router-outlet></router-outlet>
 <!-- Loading spinner -->
 @if (loadingService.loading()) {

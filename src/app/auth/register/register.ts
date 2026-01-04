@@ -55,6 +55,7 @@ submit() {
   const raw = this.regForm.getRawValue();
 
   const data = {
+    id: Number(raw.id), 
     name: raw.name!,
     lastname: raw.lastname!,
     email: raw.email!,
