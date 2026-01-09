@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule,FormGroup } from '@angular/forms';
-import { AuthService } from '../auth';
+import { AuthResponse, AuthService } from '../auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -65,7 +65,15 @@ submit() {
   };
 
   this.auth.register(data).subscribe({
-    next: () => this.router.navigate(['/login']),
+    next: ((response: AuthResponse) => {
+      if(response.token.length>0){
+        this.auth.sevaToken(response.token);
+        this.router.navigate(['/cars']);
+        return;
+    }
+    this.router.navigate(['/login']);
+  }),
+    // this.router.navigate(['/login']),
     error: err => {
       console.error(err);
       alert('Registration failed!');

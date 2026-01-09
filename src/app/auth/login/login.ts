@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule,FormGroup, } from '@angular/forms';
-import { AuthService } from '../auth';
+import { AuthResponse, AuthService } from '../auth';
 import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -66,7 +66,16 @@ export class LoginComponent {
   };
 
   this.auth.login(body).subscribe({
-    next: () => this.router.navigate(['/cars']),
+     next: ((response: AuthResponse) => {
+      if(response.token.length>0){
+        this.auth.sevaToken(response.token);
+        this.router.navigate(['/cars']);
+        return;
+    }
+    //// TODO ?? 
+
+
+  }),
     error: () => alert('Login failed!')
   });
 }
