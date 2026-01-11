@@ -7,6 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { signal, effect } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { EMPTY } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +29,18 @@ import { RouterModule } from '@angular/router';
 })
 export class RegisterComponent {
   regForm: FormGroup;  // just declare it here
-  submitted = false;
+  //submitted = false;
+  submitted = signal(false);
+  // trigger signal
+  private submitSignal = signal<any | null>(null);
+
+  // convert Observable → Signal
+  registerResult = toSignal<AuthResponse | null>(
+  toObservable(this.submitSignal).pipe(
+    switchMap(data => data ? this.auth.register(data) : EMPTY)
+  ),
+  { initialValue: null }
+);
 
   constructor(
     private fb: FormBuilder,
@@ -42,9 +58,26 @@ export class RegisterComponent {
       
       phone: ['', Validators.required]
     });
-  }
+  
+
+
+    // ✅ react to result with effect
+    effect(() => {
+      const response = this.registerResult();
+      if (!response) return;
+
+      if (response.token?.length > 0) {
+        this.auth.sevaToken(response.token);
+        this.router.navigate(['/cars']);
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+}
+
 submit() {
-  this.submitted = true;
+  //this.submitted = true;
+  this.submitted.set(true);
 
   if (this.regForm.invalid) {
     this.regForm.markAllAsTouched();
@@ -54,6 +87,7 @@ submit() {
 
   const raw = this.regForm.getRawValue();
 
+  /*
   const data = {
     id: Number(raw.id), 
     name: raw.name!,
@@ -63,7 +97,20 @@ submit() {
     birthdate: raw.birthdate!,   // ISO string from <input type="date">
     phone: raw.phone!
   };
+  */
+ this.submitSignal.set({
+      id: Number(raw.id),
+      name: raw.name,
+      lastname: raw.lastname,
+      email: raw.email,
+      password: raw.password,
+      birthdate: raw.birthdate,
+      phone: raw.phone
+      });
+  }
+}
 
+/*
   this.auth.register(data).subscribe({
     next: ((response: AuthResponse) => {
       if(response.token.length>0){
@@ -81,3 +128,4 @@ submit() {
   });
 }
 }
+*/
