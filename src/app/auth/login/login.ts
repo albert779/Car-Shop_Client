@@ -42,19 +42,6 @@ export class LoginComponent {
     });
   }
 
-/*
-  this.loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
-  });
-
-  constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,
-    private router: Router
-  ) {}
-
-  */
 
   submit() {
   this.submitted = true;
@@ -65,19 +52,17 @@ export class LoginComponent {
     password: this.loginForm.value.password ?? ''
   };
 
-  this.auth.login(body).subscribe({
-     next: ((response: AuthResponse) => {
-      debugger;
-      if(response.token.length>0){
-        this.auth.sevaToken(response.token);
-        this.router.navigate(['/cars']);
-        return;
-    }
-    //// TODO ?? 
-
-
-  }),
-    error: () => alert('Login failed!')
-  });
-}
+  
+    this.auth.login(body).subscribe({
+      next: (response: AuthResponse) => {
+        if (response?.token) {
+          this.auth.saveToken(response.token);   // ✅ save token
+          this.router.navigate(['/cars']);       // ✅ redirect
+        } else {
+          alert('No token received');
+        }
+      },
+      error: () => alert('Login failed!')
+    });
+  }
 }

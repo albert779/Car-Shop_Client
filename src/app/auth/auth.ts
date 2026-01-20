@@ -12,13 +12,12 @@ export interface AuthResponse{
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
   private api = 'auth';
   private key = 'token';
 
   constructor(private http: HttpClient) {}
 
-  sevaToken(token: string){
+  saveToken(token: string){
     localStorage.setItem(this.key, token);
   }
 

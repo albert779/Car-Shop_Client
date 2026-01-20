@@ -67,7 +67,7 @@ export class RegisterComponent {
       if (!response) return;
 
       if (response.token?.length > 0) {
-        this.auth.sevaToken(response.token);
+        this.auth.saveToken(response.token);
         this.router.navigate(['/cars']);
       } else {
         this.router.navigate(['/login']);
@@ -87,17 +87,7 @@ submit() {
 
   const raw = this.regForm.getRawValue();
 
-  /*
-  const data = {
-    id: Number(raw.id), 
-    name: raw.name!,
-    lastname: raw.lastname!,
-    email: raw.email!,
-    password: raw.password!,
-    birthdate: raw.birthdate!,   // ISO string from <input type="date">
-    phone: raw.phone!
-  };
-  */
+  
  this.submitSignal.set({
       id: Number(raw.id),
       name: raw.name,
@@ -109,23 +99,3 @@ submit() {
       });
   }
 }
-
-/*
-  this.auth.register(data).subscribe({
-    next: ((response: AuthResponse) => {
-      if(response.token.length>0){
-        this.auth.sevaToken(response.token);
-        this.router.navigate(['/cars']);
-        return;
-    }
-    this.router.navigate(['/login']);
-  }),
-    // this.router.navigate(['/login']),
-    error: err => {
-      console.error(err);
-      alert('Registration failed!');
-    }
-  });
-}
-}
-*/
