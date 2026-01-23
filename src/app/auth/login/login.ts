@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule,FormGroup, } from '@angular/forms';
-import { AuthResponse, AuthService } from '../auth';
+import { ApiResponse, AuthService } from '../auth';
 import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -54,12 +54,12 @@ export class LoginComponent {
 
   
     this.auth.login(body).subscribe({
-      next: (response: AuthResponse) => {
-        if (response?.token) {
-          this.auth.saveToken(response.token);   // ✅ save token
+      next: (response: ApiResponse<string>) => {
+        if (response.success) {
+          this.auth.saveToken(response.data);   // ✅ save token
           this.router.navigate(['/cars']);       // ✅ redirect
         } else {
-          alert('No token received');
+          alert(response.message);
         }
       },
       error: () => alert('Login failed!')

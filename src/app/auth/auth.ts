@@ -3,12 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 
-export interface AuthResponse{
-  success:boolean;
-  message:string;
-  token:string;
+
+export interface ApiResponseBase {
+  success: boolean;
+  message: string;
 }
 
+export interface ApiResponse<T> extends ApiResponseBase {
+  data: T;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -21,12 +24,12 @@ export class AuthService {
     localStorage.setItem(this.key, token);
   }
 
-  login(data: { email: string; password: string }):Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.api}/login`, data);
+  login(data: { email: string; password: string }):Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.api}/login`, data);
   }
 
-  register(data: { email: string; password: string; name: string }):Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.api}/register`, data);
+  register(data: { email: string; password: string; name: string }):Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.api}/register`, data);
   }
 
   logout() {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule,FormGroup } from '@angular/forms';
-import { AuthResponse, AuthService } from '../auth';
+import { ApiResponse, AuthService } from '../auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,7 +35,7 @@ export class RegisterComponent {
   private submitSignal = signal<any | null>(null);
 
   // convert Observable → Signal
-  registerResult = toSignal<AuthResponse | null>(
+  registerResult = toSignal<ApiResponse<string>>(
   toObservable(this.submitSignal).pipe(
     switchMap(data => data ? this.auth.register(data) : EMPTY)
   ),
@@ -66,8 +66,8 @@ export class RegisterComponent {
       const response = this.registerResult();
       if (!response) return;
 
-      if (response.token?.length > 0) {
-        this.auth.saveToken(response.token);
+      if (response.data?.length > 0) {
+        this.auth.saveToken(response.data);
         this.router.navigate(['/cars']);
       } else {
         this.router.navigate(['/login']);
