@@ -37,6 +37,7 @@ export class CarListComponent {
     this.loadCars();
   }
 
+  /*
 loadCars() {
   this.carService.getCars().subscribe({
     next: (data) => {
@@ -47,6 +48,16 @@ loadCars() {
   });
 
   this.carService.loadCars(); // fetch data from API
+}
+*/
+loadCars() {
+  this.carService.getCars().subscribe({
+    next: (response) => {
+      console.log('📥 Cars received:', response);
+      this.cars.set(response.data); // ✅ ARRAY ONLY
+    },
+    error: (err) => console.error('❌ Error loading cars:', err)
+  });
 }
 
 

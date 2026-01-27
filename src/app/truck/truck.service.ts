@@ -25,27 +25,43 @@ export class TruckService {
  // }
 }
  */
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MyCar } from '../car/myCar';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { ApiResponse } from '../auth/auth';
 
 
 @Injectable({ providedIn: 'root' })
 export class TruckService {
   private apiUrl = 'trucks';
-  private trucks = new BehaviorSubject<MyCar[]>([]);
+  //private trucks = new BehaviorSubject<MyCar[]>([]);
+  trucks = signal<MyCar[]>([]);
 
   constructor(private http: HttpClient) {}
-
-  loadTrucks(): void {
-    this.http.get<MyCar[]>(this.apiUrl).subscribe(data => this.trucks.next(data));
+loadTrucks(): void {
+    this.getAll().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.trucks.set(res.data); // ✅ update signal
+          console.log('📥 Trucks loaded:', res.data);
+        } else {
+          console.error('❌ API error:', res.message);
+        }
+      },
+      error: (err) => console.error('❌ HTTP error loading trucks:', err)
+    });
   }
 
+  /*
   getTrucks(): Observable<MyCar[]> {
     return this.trucks.asObservable();
   }
+    */
+   getAll(): Observable<ApiResponse<MyCar[]>> {
+  return this.http.get<ApiResponse<MyCar[]>>(this.apiUrl);
+}
 
   addTruck(newTruck: MyCar): Observable<MyCar> {
     //return this.http.post<MyCar>(this.apiUrl, newTruck);

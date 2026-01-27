@@ -21,6 +21,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   saveToken(token: string){
+     if (!token) return; 
     localStorage.setItem(this.key, token);
   }
 
@@ -37,6 +38,7 @@ export class AuthService {
     
   }
 
+  /*
   isLoggedIn() {
     const token = this.getToken();
     if(token== null){
@@ -44,8 +46,28 @@ export class AuthService {
     }
     return true;
   }
-
-  getToken(): string | null {
-    return localStorage.getItem(this.key);
+*/
+isLoggedIn(): boolean {
+    const token = localStorage.getItem(this.key);
+    if (!token) {
+      this.clearToken();
+      return false;
+    }
+    return true;
   }
+  clearToken() {
+    localStorage.removeItem(this.key);
+  }
+
+  
+   getToken(): string | null {
+  const token = localStorage.getItem('token');
+
+  if (!token || token === 'null' || token === 'undefined') {
+    return null;
+  }
+
+  return token;
+}
+  
 }

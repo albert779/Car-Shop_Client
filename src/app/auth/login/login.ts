@@ -59,10 +59,14 @@ export class LoginComponent {
           this.auth.saveToken(response.data);   // ✅ save token
           this.router.navigate(['/cars']);       // ✅ redirect
         } else {
+          this.auth.logout(); // delete token if response failed
           alert(response.message);
         }
       },
-      error: () => alert('Login failed!')
+      error: () => {
+    this.auth.logout(); // delete token on error
+    alert('Login failed!');
+      }
     });
   }
 }

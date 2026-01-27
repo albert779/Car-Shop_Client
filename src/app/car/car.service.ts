@@ -71,6 +71,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { MyCar } from '../car/myCar';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { ApiResponse } from '../auth/auth';
 
 
 @Injectable({ providedIn: 'root' })
@@ -84,9 +85,14 @@ export class CarService {
     this.http.get<MyCar[]>(this.apiUrl).subscribe(data => this.cars.next(data));
   }
 
+  /*
   getCars(): Observable<MyCar[]> {
     return this.cars.asObservable();
   }
+    */
+   getCars() {
+  return this.http.get<ApiResponse<MyCar[]>>('cars');
+}
 
   addCar(newCar: MyCar): Observable<MyCar> {
     //return this.http.post<MyCar>(this.apiUrl, newTruck);

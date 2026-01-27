@@ -34,19 +34,15 @@ export class TruckListComponent {
   ngOnInit() {
     this.loadTrucks();
   }
-
 loadTrucks() {
-  this.truckService.getTrucks().subscribe({
-    next: (data) => {
-      console.log('📥 Trucks received:', data);
-      this.trucks.set(data);  // ✅ Update signal
+  this.truckService.getAll().subscribe({
+    next: (res) => {
+      console.log('📥 Trucks received:', res);
+      this.trucks.set(res.data); // ✅ extract data
     },
     error: (err) => console.error('❌ Error loading trucks:', err)
   });
-
-  this.truckService.loadTrucks(); // fetch data from API
 }
-
 
 addTruck() {
    console.log("Add Truck clicked!");
