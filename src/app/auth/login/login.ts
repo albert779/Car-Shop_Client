@@ -32,7 +32,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
 
     // ✅ Safe to initialize the form here
@@ -68,5 +69,14 @@ export class LoginComponent {
     alert('Login failed!');
       }
     });
+  }
+
+
+
+ 
+
+  ngOnInit(): void {
+    // 🚪 Force logout when login page is opened
+    this.authService.logout();
   }
 }

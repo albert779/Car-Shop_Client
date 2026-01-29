@@ -21,3 +21,30 @@
   background: rgba(255, 255, 255, 0.6);
   z-index: 1000;
 }
+
+.navbar {
+  display: flex !important;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: #1976d2;
+}
+.nav-left {
+  display: flex;
+  gap: 20px;
+  color: white;
+  font-size: 18px;
+}
+
+.nav-right {
+  margin-left: auto; /* ⬅ pushes logout ALL THE WAY RIGHT */
+}
+
+.logout-btn {
+  background: #ff3d2f;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}

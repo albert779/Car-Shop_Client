@@ -61,4 +61,10 @@ export class AppComponent {
       this.router.navigate(['/login']);
     }
   }
+
+
+logout() {
+  this.auth.logout();
+  this.router.navigate(['/login']);
+}
 }
