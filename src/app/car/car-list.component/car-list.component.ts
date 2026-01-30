@@ -27,13 +27,16 @@ import { CarDetailsDialogComponent } from '../../dialogs/car-details-dialog.comp
 export class CarListComponent {
   cars = signal<MyCar[]>([]);
   dialogRef$!: any;
-  constructor(private carService: CarService, private dialog: MatDialog) {}
+  constructor(private carService: CarService, private dialog: MatDialog) {
+    debugger;
+  }
   
   trackById(index: number, car: MyCar) {
   return car.id;
   }
 
   ngOnInit() {
+    debugger;
     this.loadCars();
   }
 

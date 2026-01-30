@@ -56,13 +56,25 @@ export class LoginComponent {
   
     this.auth.login(body).subscribe({
       next: (response: ApiResponse<string>) => {
+
         if (response.success) {
           this.auth.saveToken(response.data);   // ✅ save token
-          this.router.navigate(['/cars']);       // ✅ redirect
-        } else {
-          this.auth.logout(); // delete token if response failed
-          alert(response.message);
+
+          const redirectUrlKey = 'redirectUrl';
+          const redirectUrl =  localStorage.getItem(redirectUrlKey);
+          localStorage.removeItem(redirectUrlKey);
+
+          debugger;
+          if(redirectUrl == '/login'){
+            this.router.navigate(['/']); 
+            return;
+          }
+          
+          this.router.navigate([redirectUrl]);       // ✅ redirect
+          return;
         }
+        alert(response.message);
+
       },
       error: () => {
     this.auth.logout(); // delete token on error

@@ -7,10 +7,7 @@ import { AppComponent } from './app/app.component';
 import { MaterialModule } from './app/car/modules/material.module';
 import { routes } from './app/app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { authInterceptor } from './app/interceptors/auth-interceptor';
-
-//import { loadingInterceptor } from './app/interceptors/loading.interceptor';
-
+import { authInterceptor } from './interceptors/auth-interceptor';
 import { apiBaseUrlInterceptor } from './interceptors/api-base-url.interceptor';
 
 
