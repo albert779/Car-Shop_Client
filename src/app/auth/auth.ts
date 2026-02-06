@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-
+import { LocalStorageService } from '../../local-storage/local-storage';
 
 
 export interface ApiResponseBase {
@@ -13,61 +13,64 @@ export interface ApiResponse<T> extends ApiResponseBase {
   data: T;
 }
 
+
+ 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  public readonly TOKEN_KEY = 'token';
+  private readonly ROLE_ID_KEY = 'roleId';
+  public readonly REDIRECT_URL_KEY = 'redirectUrl';
   private api = 'auth';
-  private key = 'token';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storage: LocalStorageService
+  ) {}
 
-  saveToken(token: string){
-     if (!token) return; 
-    localStorage.setItem(this.key, token);
+  // ===== LOGIN =====
+  login(data: { email: string; password: string })
+    : Observable<ApiResponse<string>> {
+
+    return this.http
+      .post<ApiResponse<string>>(
+        `${this.api}/login`,
+        data
+      )
+      .pipe(
+        tap(response => {
+          if (response.success) {
+            debugger;
+            this.storage.setValueInStore(this.TOKEN_KEY, response.data);
+          }
+        })
+      );
   }
 
-  login(data: { email: string; password: string }):Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.api}/login`, data);
+  // ===== REGISTER =====
+  register(data: { email: string; password: string; name: string })
+    : Observable<ApiResponse<string>> {
+
+    return this.http.post<ApiResponse<string>>(
+      `${this.api}/register`,
+      { ...data, roleId: 2 }
+    );
   }
 
-  register(data: { email: string; password: string; name: string }):Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.api}/register`, data);
+  // ===== LOGOUT =====
+  logout(): void {
+    this.storage.clearAll();
   }
 
-  logout() {
-    localStorage.removeItem(this.key);
-    
+  // ===== HELPERS =====
+  getToken(): string | null {
+    return this.storage.getValueFromStore(this.TOKEN_KEY);
   }
 
-  /*
-  isLoggedIn() {
-    const token = this.getToken();
-    if(token== null){
-      return false;
-    }
-    return true;
-  }
-*/
-isLoggedIn(): boolean {
-    const token = localStorage.getItem(this.key);
-    if (!token) {
-      this.clearToken();
-      return false;
-    }
-    return true;
-  }
-  clearToken() {
-    localStorage.removeItem(this.key);
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 
-  
-   getToken(): string | null {
-  const token = localStorage.getItem('token');
-
-  if (!token || token === 'null' || token === 'undefined') {
-    return null;
+  hasRole(roleId: number): boolean {
+    return this.storage.getValueFromStore(this.ROLE_ID_KEY) === roleId.toString();
   }
-
-  return token;
-}
-  
 }

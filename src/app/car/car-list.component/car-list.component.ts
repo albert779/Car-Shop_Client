@@ -27,16 +27,13 @@ import { CarDetailsDialogComponent } from '../../dialogs/car-details-dialog.comp
 export class CarListComponent {
   cars = signal<MyCar[]>([]);
   dialogRef$!: any;
-  constructor(private carService: CarService, private dialog: MatDialog) {
-    debugger;
-  }
+  constructor(private carService: CarService, private dialog: MatDialog) {}
   
   trackById(index: number, car: MyCar) {
   return car.id;
   }
 
   ngOnInit() {
-    debugger;
     this.loadCars();
   }
 
@@ -88,29 +85,6 @@ addCar() {
 }
 
   openAddCarDialog(): void {
-    // const dialogRef = this.dialog.open(AddCarDialogComponent, {
-    //   width: '400px',
-    //   disableClose: true
-    // });
-
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result) {
-    //     const tempTruck: MyCar = {
-    //       ...result,
-    //       id: Math.floor(Math.random() * 1000000)
-    //     };
-
-    //     this.trucks.set([...this.trucks(), tempTruck]);
-
-    //     this.truckService.addTruck(result).subscribe({
-    //       next: (newTruck) => {
-    //         const updatedCars = this.trucks().map(c => c.id === tempTruck.id ? newTruck : c);
-    //         this.trucks.set(updatedCars);
-    //       },
-    //       error: (err) => console.error('Error saving car:', err)
-    //     });
-    //   }
-    // });
   }
 
 editCar(car: MyCar) {

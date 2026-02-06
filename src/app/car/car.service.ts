@@ -14,7 +14,6 @@ export class CarService {
   constructor(private http: HttpClient) {}
 
   loadCars(): void {
-    debugger;
     this.http.get<MyCar[]>(this.apiUrl).subscribe(data => this.cars.next(data));
   }
 

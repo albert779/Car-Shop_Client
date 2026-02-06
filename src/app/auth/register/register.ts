@@ -62,17 +62,17 @@ export class RegisterComponent {
 
 
     // ✅ react to result with effect
-    effect(() => {
-      const response = this.registerResult();
-      if (!response) return;
+   effect(() => {
+  const response = this.registerResult();
+  if (!response) return;
 
-      if (response.data?.length > 0) {
-        this.auth.saveToken(response.data);
-        this.router.navigate(['/cars']);
-      } else {
-        this.router.navigate(['/login']);
-      }
-    });
+  if (response.success) {
+    // Navigate to login after successful registration
+    this.router.navigate(['/login']);
+  } else {
+    alert(response.message);
+  }
+});
 }
 
 submit() {
@@ -95,7 +95,8 @@ submit() {
       email: raw.email,
       password: raw.password,
       birthdate: raw.birthdate,
-      phone: raw.phone
+      phone: raw.phone,
+       roleId: 2 
       });
   }
 }
