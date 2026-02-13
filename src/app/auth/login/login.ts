@@ -46,42 +46,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // // optional: if already logged in, redirect away from login
-    // if (this.auth.isLoggedIn()) {
-    //   this.router.navigate(['/cars']);
-    // }
+    
   }
 
-  
-  /*
-  submit(): void {
-    this.submitted = true;
-    if (this.loginForm.invalid) return;
-
-    const body = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password
-    };
-
-    this.auth.login(body).subscribe({
-      next: () => {
-        // ✅ token & role already saved in AuthService
-
-        const redirectUrl =
-          localStorage.getItem('redirectUrl') || '/cars';
-
-        localStorage.removeItem('redirectUrl');
-        this.router.navigateByUrl(redirectUrl);
-      },
-      error: () => {
-        this.auth.logout();
-        alert('Login failed!');
-      }
-    });
-  }
-}
-*/
-
+ 
 
   submit(): void {
     this.submitted = true;

@@ -17,9 +17,9 @@ export interface ApiResponse<T> extends ApiResponseBase {
  
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  public readonly TOKEN_KEY = 'token';
+  private readonly TOKEN_KEY = 'token';
   private readonly ROLE_ID_KEY = 'roleId';
-  public readonly REDIRECT_URL_KEY = 'redirectUrl';
+  
   private api = 'auth';
 
   constructor(

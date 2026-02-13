@@ -5,12 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class LocalStorageService {
 
-  private readonly TOKEN_KEY = 'token';
-  private readonly ROLE_ID_KEY = 'roleId';
-  private readonly REDIRECT_URL_KEY = 'redirectUrl';
-
-
-
   public setValueInStore(key: string,value: string ){
      localStorage.setItem(key, value);
 
