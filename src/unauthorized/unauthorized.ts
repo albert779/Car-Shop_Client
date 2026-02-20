@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../app/auth/auth';
 @Component({
   selector: 'app-unauthorized',
   standalone: true,
@@ -7,14 +8,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./unauthorized.css']
 })
 export class UnauthorizedComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   goHome() {
     this.router.navigate(['/']);
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }
