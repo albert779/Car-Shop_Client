@@ -8,7 +8,6 @@ import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
 import { authGuard } from '../guards/auth-guard';
 import { NotFoundComponent } from '../not-found/not-found';
-import { UnauthorizedComponent } from '../unauthorized/unauthorized';
 //import { UnauthorizedComponent } from '../unauthorized/unauthorized.ts';
 
 /*
@@ -120,8 +119,6 @@ export const routes: Routes = [
 ];
 
 */
-
-/*
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -148,48 +145,5 @@ export const routes: Routes = [
   {
     path: '**',
     loadComponent: () => import('../not-found/not-found').then(m => m.NotFoundComponent)
-  },
-
-   { 
-    path: 'unauthorized', component: UnauthorizedComponent
-   }
-];
-*/
-export const routes: Routes = [
-
-  // Auth
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-
-  // Protected pages
-  { path: 'cars', component: CarListComponent, canActivate: [authGuard] },
-  { path: 'trucks', component: TruckListComponent, canActivate: [authGuard] },
-
-  // Admin (lazy + role protected)
-  {
-    path: 'admin',
-    canActivate: [authGuard],
-    data: { role: 'ADMIN' },
-    loadComponent: () =>
-      import('./admin/admin').then(m => m.AdminComponent)
-  },
-
-  // Unauthorized (NO guard)
-  {
-    path: 'unauthorized',
-    loadComponent: () =>
-      import('../unauthorized/unauthorized')
-        .then(m => m.UnauthorizedComponent)
-  },
-
-  // Default route
-  { path: '', redirectTo: 'cars', pathMatch: 'full' },
-
-  // 404 – MUST BE LAST
-  {
-    path: '**',
-    loadComponent: () =>
-      import('../not-found/not-found')
-        .then(m => m.NotFoundComponent)
   }
 ];
