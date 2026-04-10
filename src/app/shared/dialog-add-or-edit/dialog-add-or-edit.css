@@ -1,3 +1,4 @@
+/*
 .add-car-form {
   display: flex;
   flex-direction: column;
@@ -23,4 +24,46 @@
   justify-content: flex-end;
   gap: 8px;
   margin-top: 16px;
+}
+  */
+
+  .form-container {
+  width: 100%;
+  padding: 0;
+}
+
+/* GRID LAYOUT */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* FULL WIDTH FIELD */
+.full-width {
+  width: 100%;
+}
+
+/* MATERIAL FIX */
+mat-form-field {
+  width: 100%;
+}
+
+/* IMAGE */
+.image-upload {
+  margin-top: 16px;
+}
+
+.image-preview img {
+  width: 100px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+/* ACTION BUTTONS */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px;
 }

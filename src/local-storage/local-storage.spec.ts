@@ -1,23 +1,31 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LocalStorage } from './local-storage';
+import { TestBed } from '@angular/core/testing';
+import { LocalStorageService } from './local-storage';
 
-describe('LocalStorage', () => {
-  let component: LocalStorage;
-  let fixture: ComponentFixture<LocalStorage>;
+describe('LocalStorageService', () => {
+  let service: LocalStorageService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [LocalStorage]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(LocalStorage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(LocalStorageService);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should store and retrieve a value', () => {
+    service.setValueInStore('testKey', 'testValue');
+    const value = service.getValueFromStore('testKey');
+
+    expect(value).toBe('testValue');
+  });
+
+  it('should clear storage', () => {
+    service.setValueInStore('testKey', 'testValue');
+    service.clearAll();
+
+    const value = service.getValueFromStore('testKey');
+    expect(value).toBeNull();
   });
 });

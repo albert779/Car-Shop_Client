@@ -9,9 +9,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const REDIRECT_URL_KEY = 'redirectUrl';
   
-  // const TOKEN_KEY = 'token';
-  // cont ROLE_ID_KEY = 'roleId';
-  // cont REDIRECT_URL_KEY = 'redirectUrl';
+  
 
   const token = authService.getToken();
   const url = state.url;
@@ -20,6 +18,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (!token) {
     storage.setValueInStore(REDIRECT_URL_KEY, url);
     router.navigate(['/login']);
+    //return router.createUrlTree(['/login']);
     return false;
   }
 

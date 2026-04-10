@@ -1,38 +1,41 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MyCar } from '../car/myCar';
+import { MyCarInfo } from'../models/myCar';
+import { MyCarCreateDto } from '../models/myCarCreateDto';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { ApiResponse } from '../auth/auth';
+import { MyCarUpdateDto } from '../models/MyCarUpdateDto';
 
 
 @Injectable({ providedIn: 'root' })
 export class CarService {
   private apiUrl = 'cars';
-  private cars = new BehaviorSubject<MyCar[]>([]);
+  private cars = new BehaviorSubject<MyCarInfo[]>([]);
 
   constructor(private http: HttpClient) {}
 
   loadCars(): void {
-    this.http.get<MyCar[]>(this.apiUrl).subscribe(data => this.cars.next(data));
+    this.http.get<MyCarInfo[]>(this.apiUrl).subscribe(data => this.cars.next(data));
   }
 
    getCars() {
-  return this.http.get<ApiResponse<MyCar[]>>('cars');
+  return this.http.get<ApiResponse<MyCarInfo[]>>('cars');
 }
 
-  addCar(newCar: MyCar): Observable<MyCar> {
+  addCar(newCar: MyCarCreateDto): Observable<ApiResponse<MyCarInfo>> {
     //return this.http.post<MyCar>(this.apiUrl, newTruck);
-    return this.http.post<MyCar>(this.apiUrl, newCar).pipe(
+    return this.http.post<ApiResponse<MyCarInfo>>(this.apiUrl, newCar).pipe(
     tap(() => this.loadCars())
     );
   }
 
-  updateCar(car: MyCar): Observable<MyCar> {
-  return this.http.put<MyCar>(`${this.apiUrl}/${car.id}`, car);
-  //return this.http.put<MyCar>(`${this.apiUrl}/${car.id}`, car);
-}
 
+updateCar(id: number, payload: MyCarUpdateDto): Observable<MyCarInfo> {
+  return this.http.put<MyCarInfo>(`${this.apiUrl}/${id}`, payload).pipe(
+    tap(() => this.loadCars()) // reload the cars after update
+  );
+}
 
   deleteCar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);

@@ -1,51 +1,61 @@
-import { Component } from '@angular/core';
-import { Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
-import { MatCardModule } from '@angular/material/card';      // ✅ Required for <mat-card>
-import { MatButtonModule } from '@angular/material/button';  // ✅ Required for <button mat-button>
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddOrEdit } from '../dialog-add-or-edit/dialog-add-or-edit';
-import { MyCar } from '../../car/myCar';
-
+import { MyCarInfo } from '../../models/myCar';
+import { MyCarUpdateDto } from '../../models/MyCarUpdateDto';
 
 @Component({
   selector: 'app-item',
-   imports: [
+  standalone: true,
+  imports: [
     CommonModule,
-    MatCardModule,      
+    MatCardModule,
     MatButtonModule
-  ], 
+  ],
   templateUrl: './item.html',
-  styleUrl: './item.css'
+  styleUrls: ['./item.css']
 })
 export class Item {
-  @Input({ required: true }) itemInfo!: MyCar;
-  @Output() edit = new EventEmitter<MyCar>();
-  @Output() delete = new EventEmitter<number>();
-  @Output() viewDetails = new EventEmitter<MyCar>();
-  private dialogRef$: any;
 
+  @Input({ required: true }) itemInfo!: MyCarInfo;
+  @Input({ required: true }) type!: 'car' | 'truck';
 
-  constructor(private readonly dialog: MatDialog){
-    
-  }
+  @Output() edit = new EventEmitter<MyCarUpdateDto>();
+  //@Output() delete = new EventEmitter<MyCarInfo>();
+  @Output() delete = new EventEmitter<MyCarInfo>();
+  @Output() viewDetails = new EventEmitter<MyCarInfo>();
+  //@Output() requestInfo = new EventEmitter<MyCarInfo>();
+  @Output() requestInfo = new EventEmitter<MyCarInfo >();
+  @Output() saved = new EventEmitter<void>();
+
+  constructor(private readonly dialog: MatDialog) { }
 
   onEditClick() {
-    // Open dialog with the truck data
-      this.dialogRef$ = this.dialog.open(DialogAddOrEdit, { data: this.itemInfo });
-      this.dialogRef$.afterClosed().subscribe((result: MyCar | undefined) => {
-      console.log(result);
+    // Open dialog with the car/truck data
+    const dialogRef = this.dialog.open(DialogAddOrEdit, { data: this.itemInfo });
+    dialogRef.afterClosed().subscribe((result: MyCarUpdateDto | undefined) => {
+      if (result) {
         this.edit.emit(result);
-      });
-    }
-
-    onDeleteClick() {
-     this.delete.emit(this.itemInfo.id);
+      }
+    });
   }
 
+  onDeleteClick() {
+    this.delete.emit(this.itemInfo);
+  }
 
   onDetails() {
-  this.viewDetails.emit(this.itemInfo);
-}
+    this.viewDetails.emit(this.itemInfo);
+  }
 
+  onRequestInfo() {
+    this.requestInfo.emit(this.itemInfo );
+  }
+
+  clicked() {
+  this.saved.emit();
+}
 }

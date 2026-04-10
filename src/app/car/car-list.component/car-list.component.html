@@ -2,21 +2,19 @@
 
 <h2 style="text-align: center;">Car List</h2>
 
-<button mat-raised-button color="primary" (click)="addCar()">Add Car</button>
 
+
+<app-add-item-button (saved)="addCar($event)"></app-add-item-button>
 
 <ul class="car-list">
-@for (car of cars(); track car.id){
-   <li>
-      <app-item
-        [itemInfo]="car"
-        (edit)="editCar($event)"
-       (delete)="deleteCar($event)"
-       (viewDetails)="detailsCar($event)"
-        >
-      </app-item>
-    </li>
- }
-
-
+  <li *ngFor="let car of cars(); trackBy: trackByCarId">
+    <app-item
+      [itemInfo]="car"
+      type="car"
+      (edit)="editCar($event)"          
+      (delete)="deleteCar($event)"       
+      (viewDetails)="detailsCar($event)"
+      (requestInfo)="openRequestInfoDialog($event)">
+    </app-item>
+  </li>
 </ul>

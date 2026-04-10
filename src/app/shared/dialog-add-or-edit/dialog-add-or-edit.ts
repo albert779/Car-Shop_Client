@@ -1,58 +1,59 @@
-import { MyCar } from '../../car/myCar';
-import { Component,Inject } from '@angular/core';
-import { MatDialogRef , MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Component, Injector } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MyCarInfo } from '../../models/myCar';
+import { MyCarCreateDto } from '../../models/myCarCreateDto';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
-
-
 @Component({
   selector: 'app-dialog-add-or-edit',
- standalone: true,
-  imports: [CommonModule,
-           ReactiveFormsModule,
-           FormsModule, 
-           MatFormFieldModule,
-            MatInputModule,
-             MatButtonModule
-            ],
-
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
   templateUrl: './dialog-add-or-edit.html',
-  styleUrl: './dialog-add-or-edit.css'
+  styleUrls: ['./dialog-add-or-edit.css']
 })
 export class DialogAddOrEdit {
- carForm: FormGroup;
+  carForm: FormGroup;
   selectedImageBase64: string | null = null;
   isEditMode = false;
+  public data!: MyCarCreateDto | MyCarInfo;
 
   constructor(
     private dialogRef: MatDialogRef<DialogAddOrEdit>,
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: MyCar 
+    private injector: Injector
   ) {
-    this.isEditMode = !!data;
+    // ✅ get the data using the Injector
+    this.data = this.injector.get(MAT_DIALOG_DATA) as MyCarCreateDto | MyCarInfo;
+    this.isEditMode = !!this.data;
 
-    // Initialize form
     this.carForm = this.fb.group({
-      model: [data?.model || '', Validators.required],
-      color: [data?.color || '', Validators.required],
-      date: [data?.date || '', Validators.required],
-      price: [data?.price || '', [Validators.required, Validators.pattern(/^\d+$/)]],
-      details: [data?.details || '', Validators.required],
-      image: [data?.image || '']
+      model: [this.data?.model || '', Validators.required],
+      color: [this.data?.color || '', Validators.required],
+      date: [this.data?.date || '', Validators.required],
+      price: [this.data?.price || '', [Validators.required, Validators.pattern(/^\d+$/)]],
+      details: [this.data?.details || '', Validators.required],
+      image: [this.data?.image || '']
     });
 
-    // Preload image if exists
-    if (data?.image) {
-      this.selectedImageBase64 = data.image;
+    if (this.data?.image) {
+      this.selectedImageBase64 = this.data.image;
     }
   }
 
-    onFileSelected(event: Event): void {
+  onFileSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -70,23 +71,21 @@ export class DialogAddOrEdit {
 
   submitted = false;
 
-  save(): void {
-
-  this.submitted = true;
-
-  if (this.carForm.invalid) {
-    return; // stop save, show validation messages
-  }
-
+  save() {
   const formValue = this.carForm.value;
 
-  const result: MyCar = {
-    ...this.data,          // keep id, type, and any existing fields
-    ...formValue,          // override with new values
-    id: this.data?.id ?? 0, // ensure ID is kept for editing
-     image: this.selectedImageBase64 ?? formValue.image 
-  };
+  // ✅ FIRST check if data exists
+  if (this.data && 'id' in this.data) {
+    // EDIT mode
+    const updated = {
+      ...this.data,
+      ...formValue
+    };
 
-  this.dialogRef.close(result);
+    this.dialogRef.close(updated);
+  } else {
+    // ADD mode
+    this.dialogRef.close(formValue);
+  }
 }
 }

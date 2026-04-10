@@ -2,20 +2,19 @@
 
 
 
-<button mat-raised-button color="primary" (click)="addTruck()">
-  Add Truck
-</button>
+<app-add-item-button (saved)="addTruck($event)"></app-add-item-button>
 
 <ul class="car-list">
 @for (truck of trucks(); track truck.id){
    <li>
-      <app-item
-        [itemInfo]="truck"
-        (edit)="editTruck($event)"
-        (delete)="deleteTruck($event)"
-         (viewDetails)="detailsTruck($event)"
-        >
-      </app-item>
+     <app-item
+  [itemInfo]="truck"
+  type="truck"
+  (edit)="editTruck($event)"
+  (delete)="deleteTruck($event)"    
+  (viewDetails)="detailsTruck($event)"
+  (requestInfo)="openRequestInfoDialog($event)">
+</app-item>
     </li>
  }
 

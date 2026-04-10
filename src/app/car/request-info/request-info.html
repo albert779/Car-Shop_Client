@@ -1,0 +1,19 @@
+<h2>Request Information</h2>
+
+<form [formGroup]="form">
+
+  <input formControlName="firstName" readonly placeholder="First Name">
+  <input formControlName="lastName" readonly placeholder="Last Name">
+  <input formControlName="email" readonly placeholder="Email">
+
+  <input formControlName="model" readonly placeholder="Model">
+  <input formControlName="color" readonly placeholder="Color">
+  <input formControlName="price" readonly placeholder="Price">
+  <input formControlName="phone" readonly placeholder="Phone">
+
+  <textarea formControlName="message" placeholder="Write your message"></textarea>
+
+  <button type="button" (click)="send()">Send Request</button>
+  <button type="button" (click)="close()">Cancel</button>
+
+</form>

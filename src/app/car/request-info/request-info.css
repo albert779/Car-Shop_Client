@@ -1,0 +1,91 @@
+/* Container */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+/* Labels */
+label {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Inputs and Textarea */
+input[readonly], input, textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Read-only fields */
+input[readonly] {
+  background-color: #f2f2f2;
+  color: #555;
+}
+
+/* Textarea */
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: Arial, sans-serif;
+}
+
+/* Buttons container */
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* Buttons style */
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button[type="button"] {
+  background-color: #eee;
+  color: #333;
+}
+
+button[type="button"]:hover {
+  background-color: #ddd;
+}
+
+button[type="submit"], button[type="button"].send {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+button[type="submit"]:hover, button[type="button"].send:hover {
+  background-color: #115293;
+}
+
+/* Responsive for small screens */
+@media (max-width: 480px) {
+  form {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+}

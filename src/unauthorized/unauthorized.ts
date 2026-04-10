@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LocalStorageService } from '../local-storage/local-storage';
+
 @Component({
   selector: 'app-unauthorized',
   standalone: true,
@@ -7,14 +9,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./unauthorized.css']
 })
 export class UnauthorizedComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private storage: LocalStorageService) {}
 
   goHome() {
     this.router.navigate(['/']);
   }
 
   logout() {
-    localStorage.removeItem('token');
+    this.storage.removeValueFromStore('token');
     this.router.navigate(['/login']);
   }
 }

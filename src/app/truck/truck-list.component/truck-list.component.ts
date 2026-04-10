@@ -1,13 +1,18 @@
-import { MyCar } from './../../car/myCar';
+import { MyCarInfo } from'../../models/myCar';
+import { MyCarCreateDto } from '../../models/myCarCreateDto';
 import { Component, signal  } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common'; // ✅ Import AsyncPipe
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TruckService } from '../truck.service';
 import { Item } from '../../shared/item/item';
-import { DialogAddOrEdit } from '../../shared/dialog-add-or-edit/dialog-add-or-edit';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CarDetailsDialogComponent } from '../../dialogs/car-details-dialog.component/car-details-dialog.component';
+import { RequestInfoComponent } from '../../car/request-info/request-info';
+import { MyCarUpdateDto } from '../../models/MyCarUpdateDto';
+import { AddItemButtonComponent } from '../../shared/add-item-button/add-item-button';
+import { AuthService } from '../../auth/auth';
+
 
 @Component({
   selector: 'app-truck-list',
@@ -18,16 +23,17 @@ import { CarDetailsDialogComponent } from '../../dialogs/car-details-dialog.comp
     Item,      // ✅ Needed for *ngIf, @for, etc.
    // AsyncPipe,            // ✅ Fixes "No pipe found with name 'async'"
     MatButtonModule,
+    AddItemButtonComponent,
     MatDialogModule
     
   ]
 })
 export class TruckListComponent {
-  trucks = signal<MyCar[]>([]);
+  trucks = signal<MyCarInfo[]>([]);
   dialogRef$!: any;
-  constructor(private truckService: TruckService, private dialog: MatDialog) {}
+  constructor(private truckService: TruckService, private dialog: MatDialog, private loggedUserService: AuthService,private authService: AuthService) {}
   
-  trackById(index: number, truck: MyCar) {
+  trackById(index: number, truck: MyCarInfo) {
   return truck.id;
   }
 
@@ -44,70 +50,89 @@ loadTrucks() {
   });
 }
 
-addTruck() {
-   console.log("Add Truck clicked!");
-  const dialogRef = this.dialog.open(DialogAddOrEdit, {
-    width: '400px',
-    data: null // or {} if you prefer
-  });
+  addTruck(truck: MyCarCreateDto | MyCarInfo) {
+  if (!truck) return;
 
-  dialogRef.afterClosed().subscribe((result: MyCar | null | undefined) => {
-    if (!result) return; // user closed dialog
-
-    // Remove id for new truck
-    result.id = undefined;
-
-    this.truckService.addTruck(result).subscribe({
-      next: (savedTruck) => {
-        console.log("Truck added:", savedTruck);
-        // loadTrucks() already called in service via tap()
-      },
-      error: (err) => console.error("Error adding truck:", err)
-    });
+  this.truckService.addTruck(truck).subscribe({
+    next: (response: MyCarInfo) => {
+      console.log('Truck added:', response);
+      this.loadTrucks(); // refresh list
+    },
+    error: (err) => console.error('Error adding truck:', err)
   });
 }
 
   openAddCarDialog(): void {
     
   }
-
-editTruck(truck: MyCar) {
-  // Find the truck in the signal array
-  console.log('Editing truck with id:', truck);
-
-    // Send update to the server
-    this.truckService.updateTruck(truck).subscribe({
-      next: (res) => {
-        // Update the signal array with server response
-        const list = this.trucks().map(c => c.id === res.id ? res : c);
-        this.trucks.set(list);
-      },
-      error: (err) => {
-        console.error('Update failed:', err);
-        // Reload trucks from the server in case of error
-        this.loadTrucks();
-      },
+// Edit a truck
+editTruck(truck: MyCarInfo): void {
+  const payload: MyCarUpdateDto = { ...truck }; // or construct DTO as needed
+  this.truckService.updateTruck(truck.id, payload).subscribe({
+    next: (updated) => {
+      const updatedList = this.trucks().map(t => t.id === updated.id ? updated : t);
+      this.trucks.set(updatedList);
+       window.location.reload();
+      console.log('Truck updated:', updated);
+    },
+    error: (err) => {
+      console.error('Update failed:', err);
+      this.loadTrucks();
+    }
   });
 }
 
-
-deleteTruck(id: number) {
-  this.truckService.deleteTruck(id).subscribe({
+deleteTruck(truck: MyCarInfo): void {
+  this.truckService.deleteTruck(truck.id).subscribe({
     next: () => {
+      const updatedList = this.trucks().filter(t => t.id !== truck.id);
+      this.trucks.set(updatedList);
       console.log('Truck deleted successfully');
-      this.loadTrucks(); // ✅ reload the list after delete
     },
     error: (err) => console.error('Error deleting truck:', err)
   });
 }
 
- detailsTruck(car: MyCar) {
+ detailsTruck(car: MyCarInfo) {
   this.dialog.open(CarDetailsDialogComponent, {
     width: '600px',
     data: car
   });
 }
+
+requestInfoCar(trtuckId: number): void {
+    console.log('Request info for truck:', trtuckId);
+  }
+
+openRequestInfoDialog(car: MyCarInfo) {
+  const token = this.loggedUserService.getToken();
+
+  if (!token) {
+    console.error('User not logged in');
+    alert('Please log in first.');
+    return;
+  }
+
+  /*
+
+  this.dialog.open(RequestInfoComponent, {
+    width: '650px',
+    data: {
+      token, // only token
+      vehicle: car
+      //user: this.loggedUser
+    }
+  });
+  */
+ const user = this.authService.getUser(); // returns { firstName, lastName, email, phone }
+
+this.dialog.open(RequestInfoComponent, {
+  width: '650px',
+  data: {
+    user,        // pass the whole user object
+    vehicle: car, // car/truck info
+    token: user?.token // optional if needed
+  }
+});
 }
-  
-
-
+}

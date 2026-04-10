@@ -1,43 +1,17 @@
-/*
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { MyCar } from '../car/myCar';
-import { HttpClient } from '@angular/common/http';
-
-@Injectable({ providedIn: 'root' })
-export class TruckService {
-  private trucks = new BehaviorSubject<MyCar[]>([]);
-
-  getTrucks(): Observable<MyCar[]> {
-    return this.trucks.asObservable();
-  }
-
-  addTruck(newTruck: MyCar) {
-    this.trucks.next([...this.trucks.value, newTruck]);
-  }
-
-  deleteTruck(id: number){
-    this.trucks.next(this.trucks.value.filter(truck => truck.id !== id));
-  }
-
-// deleteTruck(id: number): Observable<void> {
-//    return this.http.delete<void>(`${this.apiUrl}/${id}`);
- // }
-}
- */
 import { Injectable, signal } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { MyCar } from '../car/myCar';
+import {  Observable } from 'rxjs';
+import { MyCarInfo } from'../models/myCar';
+import { MyCarCreateDto } from '../models/myCarCreateDto';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { ApiResponse } from '../auth/auth';
+import { MyCarUpdateDto } from '../models/MyCarUpdateDto';
 
 
 @Injectable({ providedIn: 'root' })
 export class TruckService {
   private apiUrl = 'trucks';
-  //private trucks = new BehaviorSubject<MyCar[]>([]);
-  trucks = signal<MyCar[]>([]);
+  trucks = signal<MyCarInfo[]>([]);
 
   constructor(private http: HttpClient) {}
 loadTrucks(): void {
@@ -53,26 +27,20 @@ loadTrucks(): void {
       error: (err) => console.error('❌ HTTP error loading trucks:', err)
     });
   }
-
-  /*
-  getTrucks(): Observable<MyCar[]> {
-    return this.trucks.asObservable();
-  }
-    */
-   getAll(): Observable<ApiResponse<MyCar[]>> {
-  return this.http.get<ApiResponse<MyCar[]>>(this.apiUrl);
+   getAll(): Observable<ApiResponse<MyCarInfo[]>> {
+  return this.http.get<ApiResponse<MyCarInfo[]>>(this.apiUrl);
 }
 
-  addTruck(newTruck: MyCar): Observable<MyCar> {
-    //return this.http.post<MyCar>(this.apiUrl, newTruck);
-    return this.http.post<MyCar>(this.apiUrl, newTruck).pipe(
-    tap(() => this.loadTrucks())
-    );
-  }
+  addTruck(newTruck: MyCarCreateDto): Observable<MyCarInfo> {
+  return this.http.post<MyCarInfo>(this.apiUrl, newTruck).pipe(
+    tap(() => this.loadTrucks()) // now correct: returns MyCarInfo with id
+  );
+}
 
-  updateTruck(truck: MyCar): Observable<MyCar> {
-  return this.http.put<MyCar>(`${this.apiUrl}/${truck.id}`, truck);
-  //return this.http.put<MyCar>(`${this.apiUrl}/${car.id}`, car);
+  updateTruck(id: number, payload: MyCarUpdateDto): Observable<MyCarInfo> {
+  return this.http.put<MyCarInfo>(`${this.apiUrl}/${id}`, payload).pipe(
+    tap(() => this.loadTrucks())
+  );
 }
 
 
