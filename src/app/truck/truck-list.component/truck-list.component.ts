@@ -11,7 +11,7 @@ import { CarDetailsDialogComponent } from '../../dialogs/car-details-dialog.comp
 import { RequestInfoComponent } from '../../car/request-info/request-info';
 import { MyCarUpdateDto } from '../../models/MyCarUpdateDto';
 import { AddItemButtonComponent } from '../../shared/add-item-button/add-item-button';
-import { AuthService } from '../../auth/auth';
+import { ApiResponse, AuthService } from '../../auth/auth';
 
 
 @Component({
@@ -50,6 +50,7 @@ loadTrucks() {
   });
 }
 
+/*
   addTruck(truck: MyCarCreateDto | MyCarInfo) {
   if (!truck) return;
 
@@ -61,11 +62,34 @@ loadTrucks() {
     error: (err) => console.error('Error adding truck:', err)
   });
 }
+*/
 
+addTruck(truck: MyCarCreateDto | MyCarInfo) {
+  if (!truck) return;
+
+  const payload: MyCarCreateDto = {
+    vehicleTypeId: 2, // 🚛 TRUCK (adjust if needed)
+    model: truck.model,
+    color: truck.color,
+    date: truck.date,
+    price: truck.price,
+    details: truck.details,
+    image: truck.image
+  };
+
+  this.truckService.addTruck(payload).subscribe({
+    next: (response: MyCarInfo) => {
+      console.log('Truck added:', response);
+      this.loadTrucks();
+    },
+    error: (err) => console.error('Error adding truck:', err)
+  });
+}
   openAddCarDialog(): void {
     
   }
 // Edit a truck
+/*
 editTruck(truck: MyCarInfo): void {
   const payload: MyCarUpdateDto = { ...truck }; // or construct DTO as needed
   this.truckService.updateTruck(truck.id, payload).subscribe({
@@ -81,6 +105,41 @@ editTruck(truck: MyCarInfo): void {
     }
   });
 }
+  */
+
+editTruck(truck: MyCarUpdateDto): void {
+
+  const payload: MyCarUpdateDto = {
+    id: truck.id,
+    vehicleTypeId: truck.vehicleTypeId,
+    model: truck.model,
+    color: truck.color,
+    date: truck.date,
+    price: truck.price,
+    details: truck.details,
+    image: truck.image
+  };
+
+  this.truckService.updateTruck(truck.id, payload).subscribe({
+   next: (updated: MyCarInfo) => {
+    window.location.reload();
+      const updatedList = this.trucks().map(t =>
+        t.id === updated.id ? updated : t
+      );
+
+      this.trucks.set(updatedList);
+
+      console.log('Truck updated:', updated);
+    },
+
+    error: (err) => {
+      console.error('Update failed:', err);
+      //this.loadTrucks();
+     
+    }
+  });
+}
+
 
 deleteTruck(truck: MyCarInfo): void {
   this.truckService.deleteTruck(truck.id).subscribe({
@@ -113,17 +172,6 @@ openRequestInfoDialog(car: MyCarInfo) {
     return;
   }
 
-  /*
-
-  this.dialog.open(RequestInfoComponent, {
-    width: '650px',
-    data: {
-      token, // only token
-      vehicle: car
-      //user: this.loggedUser
-    }
-  });
-  */
  const user = this.authService.getUser(); // returns { firstName, lastName, email, phone }
 
 this.dialog.open(RequestInfoComponent, {

@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { LocalStorageService } from '../local-storage/local-storage';
+import { LocalStorageService } from './local-storage';
 
 // API response contains only token
 interface LoginResponse {

@@ -10,7 +10,7 @@ import { MyCarUpdateDto } from '../models/MyCarUpdateDto';
 
 @Injectable({ providedIn: 'root' })
 export class CarService {
-  private apiUrl = 'cars';
+  private apiUrl = 'vehicle';
   private cars = new BehaviorSubject<MyCarInfo[]>([]);
 
   constructor(private http: HttpClient) {}
@@ -20,7 +20,8 @@ export class CarService {
   }
 
    getCars() {
-  return this.http.get<ApiResponse<MyCarInfo[]>>('cars');
+  //return this.http.get<ApiResponse<MyCarInfo[]>>('car');
+   return this.http.get<ApiResponse<MyCarInfo[]>>('vehicle?type=Car');
 }
 
   addCar(newCar: MyCarCreateDto): Observable<ApiResponse<MyCarInfo>> {

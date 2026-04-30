@@ -7,7 +7,7 @@ import { TruckListComponent } from './truck/truck-list.component/truck-list.comp
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
 import { authGuard } from '../guards/auth-guard';
-import { NotFoundComponent } from '../not-found/not-found';
+import { NotFoundComponent } from '../app/not-found/not-found';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -34,6 +34,6 @@ export const routes: Routes = [
   // 404 – MUST BE LAST
   {
     path: '**',
-    loadComponent: () => import('../not-found/not-found').then(m => m.NotFoundComponent)
+    loadComponent: () => import('../app/not-found/not-found').then(m => m.NotFoundComponent)
   }
 ];

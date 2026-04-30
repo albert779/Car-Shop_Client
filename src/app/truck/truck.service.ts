@@ -10,7 +10,7 @@ import { MyCarUpdateDto } from '../models/MyCarUpdateDto';
 
 @Injectable({ providedIn: 'root' })
 export class TruckService {
-  private apiUrl = 'trucks';
+  private apiUrl = 'vehicle';
   trucks = signal<MyCarInfo[]>([]);
 
   constructor(private http: HttpClient) {}
@@ -28,7 +28,8 @@ loadTrucks(): void {
     });
   }
    getAll(): Observable<ApiResponse<MyCarInfo[]>> {
-  return this.http.get<ApiResponse<MyCarInfo[]>>(this.apiUrl);
+  //return this.http.get<ApiResponse<MyCarInfo[]>>(this.apiUrl);
+  return this.http.get<ApiResponse<MyCarInfo[]>>('vehicle?type=Truck');
 }
 
   addTruck(newTruck: MyCarCreateDto): Observable<MyCarInfo> {

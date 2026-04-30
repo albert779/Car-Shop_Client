@@ -1,12 +1,13 @@
 // remove to separate file
 export interface MyCarCreateDto {
+  vehicleTypeId: number;
   model: string;
   color: string;
   date: Date;
   price: number;
   details: string;
   image: string;
-  type: string;
+//type: string;
 }
 
 export const environment = {

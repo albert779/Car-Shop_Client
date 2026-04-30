@@ -7,7 +7,8 @@ export interface MyCarInfo {
   price: number;
   details: string;
   image: string;
-  type: string;
+ //type: string;
+   vehicleTypeId: number;
 }
 
 

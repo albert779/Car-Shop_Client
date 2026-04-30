@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../local-storage/local-storage';
+import { LocalStorageService } from '../services/local-storage';
 
 @Component({
   selector: 'app-unauthorized',

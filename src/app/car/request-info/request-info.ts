@@ -56,23 +56,88 @@ export class RequestInfoComponent implements OnInit {
       firstName: user?.firstName || '',
       lastName: user?.lastName || '',
       email: user?.email || '',
-      phone: user.phone || '',
+      phone: user?.phone || '',
       model: v?.model || '',
       color: v?.color || '',
       price: v?.price || ''
     });
   }
 
-  send() {
-    if (this.form.invalid) return;
 
-    this.requestService.sendRequest(this.form.value).subscribe(() => {
-      alert('Request sent successfully');
-      this.dialogRef.close();
-    });
-  }
 
   close() {
     this.dialogRef.close();
   }
+
+  
+
+send(): void {
+  console.log("SEND CLICKED");
+
+  console.log("DATA CHECK:", {
+    user: this.data?.user,
+    vehicle: this.data?.vehicle,
+    carId: this.data?.vehicle?.id,
+    userId: this.data?.user?.id,
+    form: this.form?.value
+  });
+
+  if (!this.form || this.form.invalid) {
+    console.warn("Form is invalid");
+    return;
+  }
+
+  // ✅ safe user parsing
+  let user = this.data?.user;
+
+  if (typeof user === 'string') {
+    try {
+      user = JSON.parse(user);
+    } catch (e) {
+      console.error('Invalid user data', e);
+      alert('User data error. Please login again.');
+      return;
+    }
+  }
+
+  // 🔥 normalize ids (IMPORTANT FIX)
+  const carId = Number(this.data?.vehicle?.id);
+  const userId = Number(user?.id);
+  const message = this.form?.get('message')?.value?.trim();
+
+  // ⚠️ strict validation
+  if (!carId || !userId || !message?.length) {
+    console.error("Missing required fields", { carId, userId, message });
+    alert("Missing required data");
+    return;
+  }
+
+  // ✅ payload
+  const payload = {
+   carId,
+      userId,
+      firstName: this.form.value.firstName,
+      lastName: this.form.value.lastName,
+      phone: this.form.value.phone,
+      email: this.form.value.email,
+      model: this.form.value.model,
+      color: this.form.value.color,
+      price: this.form.value.price,
+      details: this.form.value.message // 🔥 correct field
+  };
+
+  console.log('SENDING REQUEST:', payload);
+
+  this.requestService.sendRequest(payload).subscribe({
+    next: (res) => {
+      console.log("SUCCESS:", res);
+      alert('Request sent successfully');
+      this.dialogRef?.close(true);
+    },
+    error: (err) => {
+      console.error('Request failed:', err);
+      alert('Failed to send request');
+    }
+  });
+}
 }

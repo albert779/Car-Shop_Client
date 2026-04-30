@@ -14,7 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { LocalStorageService } from '../../../local-storage/local-storage';
+import { LocalStorageService } from '../../../services/local-storage';
+import { jwtDecode } from 'jwt-decode';
 
 interface LoginResponse {
   firstName: string;
@@ -61,9 +62,10 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
 
-  /*
+
 submit(): void {
   this.submitted = true;
+
   if (this.loginForm.invalid) return;
 
   this.auth.login(this.loginForm.value).subscribe({
@@ -71,105 +73,49 @@ submit(): void {
 
       console.log('LOGIN RESPONSE:', response);
 
-      // handle both possible backend formats
-      const token =
-        typeof response.data === 'string'
-          ? response.data
-          : response.data?.token;
-
-      if (!token) {
-        console.error('Token not found in response', response);
-        alert('Login failed: token missing');
-        return;
-      }
-
-      // save token
-      this.auth.setToken(token);
-      //this.auth.setUser(user);
-
-      const redirectUrl = (this.storage.getValueFromStore('redirectUrl')as string) || '/cars';
-      this.storage.removeValueFromStore('redirectUrl');
-
-      this.router.navigateByUrl(redirectUrl);
-    },
-
-    error: (err) => {
-      console.error(err);
-      this.auth.logout();
-      alert('Login failed!');
-    }
-  });
-}
-}
-*/
-
-
-
-
-
-/*
-submit(): void {
-  this.submitted = true;
-  if (this.loginForm.invalid) return;
-
-  this.auth.login(this.loginForm.value).subscribe({
-    next: (user) => {
-      console.log('Logged-in user:', user);
-
-
-      // 🔒 Safety check
-      if (!user || !user.token) {
-        console.error('❌ Invalid user response:', user);
-        alert('Login failed: invalid response');
-        return;
-      }
-
-      // ✅ VERY IMPORTANT: save user + token
-      this.auth.setUser(user);
-
-      const redirectUrl =
-        this.storage.getValueFromStore('redirectUrl') || '/cars';
-
-      this.storage.removeValueFromStore('redirectUrl');
-      this.router.navigateByUrl(redirectUrl);
-    },
-    error: (err) => {
-      console.error(err);
-      this.auth.logout();
-      alert('Login failed!');
-    }
-  });
-}
-}
-*/
-
-submit(): void {
-  this.submitted = true;
-  if (this.loginForm.invalid) return;
-
-  this.auth.login(this.loginForm.value).subscribe({
-    next: (response: any) => {
-
-      console.log('LOGIN RESPONSE:', response);
-
-      const data = response.data;
+      const data = response?.data;
 
       if (!data?.token) {
         alert('Login failed');
         return;
       }
 
+      // 🔥 IMPORTANT: try to get id safely
+      let userId = data.id ?? null;
+
+
+      if (!userId) {
+        try {
+          const decoded: any = jwtDecode(data.token);
+          userId = decoded?.id; // ⚠️ depends on backend claim name
+        } catch (e) {
+          console.error('JWT decode failed', e);
+        }
+      }
+
+      if (!userId) {
+        console.error('User ID missing!');
+        alert('Login failed: user id missing');
+        return;
+      }
+
       // ✅ Save token
       this.auth.setToken(data.token);
 
-      // ✅ Save user (INCLUDING phone)
-      this.auth.setUser({
+      // ✅ Save user (NOW includes id)
+      const user = {
+        id:  Number(userId), // 🔥 FIX for your "undefined userId" issue
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         phone: data.phone,
         token: data.token
-      });
+      };
+
+      this.auth.setUser(user);
+
+      // (optional but recommended for dialogs)
+      this.storage.setValueInStore('user', JSON.stringify(user));
 
       this.router.navigateByUrl('/cars');
     },
