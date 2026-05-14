@@ -1,0 +1,64 @@
+.search-container {
+  width: 500px;
+  height: 70px;
+
+  border: 3px solid black;
+  border-radius: 50px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 20px;
+
+  background: white;
+
+  margin: 30px auto;
+}
+
+.search-container input {
+  flex: 1;
+
+  border: none;
+  outline: none;
+
+  font-size: 32px;
+
+  background: transparent;
+}
+
+.search-container button {
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  font-size: 35px;
+}
+
+.cars {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(250px, 1fr));
+
+  gap: 20px;
+
+  margin-top: 40px;
+}
+
+.car-card {
+  border: 1px solid #ddd;
+
+  padding: 15px;
+
+  border-radius: 15px;
+}
+
+.car-card img {
+  width: 100%;
+  height: 180px;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+}

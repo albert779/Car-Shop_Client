@@ -12,6 +12,7 @@ import { RequestInfoComponent } from '../../car/request-info/request-info';
 import { MyCarUpdateDto } from '../../models/MyCarUpdateDto';
 import { AddItemButtonComponent } from '../../shared/add-item-button/add-item-button';
 import { ApiResponse, AuthService } from '../../auth/auth';
+import { SearchComponent } from '../../search/search';
 
 
 @Component({
@@ -24,13 +25,16 @@ import { ApiResponse, AuthService } from '../../auth/auth';
    // AsyncPipe,            // ✅ Fixes "No pipe found with name 'async'"
     MatButtonModule,
     AddItemButtonComponent,
-    MatDialogModule
+    MatDialogModule,
+    SearchComponent
     
   ]
 })
 export class TruckListComponent {
   trucks = signal<MyCarInfo[]>([]);
-  dialogRef$!: any;
+  filteredTrucks = signal<MyCarInfo[]>([]);
+  searchText = '';
+
   constructor(private truckService: TruckService, private dialog: MatDialog, private loggedUserService: AuthService,private authService: AuthService) {}
   
   trackById(index: number, truck: MyCarInfo) {
@@ -44,25 +48,12 @@ loadTrucks() {
   this.truckService.getAll().subscribe({
     next: (res) => {
       console.log('📥 Trucks received:', res);
-      this.trucks.set(res.data); // ✅ extract data
+       this.trucks.set(res.data);
+        this.filteredTrucks.set(res.data);
     },
     error: (err) => console.error('❌ Error loading trucks:', err)
   });
 }
-
-/*
-  addTruck(truck: MyCarCreateDto | MyCarInfo) {
-  if (!truck) return;
-
-  this.truckService.addTruck(truck).subscribe({
-    next: (response: MyCarInfo) => {
-      console.log('Truck added:', response);
-      this.loadTrucks(); // refresh list
-    },
-    error: (err) => console.error('Error adding truck:', err)
-  });
-}
-*/
 
 addTruck(truck: MyCarCreateDto | MyCarInfo) {
   if (!truck) return;
@@ -88,24 +79,6 @@ addTruck(truck: MyCarCreateDto | MyCarInfo) {
   openAddCarDialog(): void {
     
   }
-// Edit a truck
-/*
-editTruck(truck: MyCarInfo): void {
-  const payload: MyCarUpdateDto = { ...truck }; // or construct DTO as needed
-  this.truckService.updateTruck(truck.id, payload).subscribe({
-    next: (updated) => {
-      const updatedList = this.trucks().map(t => t.id === updated.id ? updated : t);
-      this.trucks.set(updatedList);
-       window.location.reload();
-      console.log('Truck updated:', updated);
-    },
-    error: (err) => {
-      console.error('Update failed:', err);
-      this.loadTrucks();
-    }
-  });
-}
-  */
 
 editTruck(truck: MyCarUpdateDto): void {
 
@@ -140,7 +113,10 @@ editTruck(truck: MyCarUpdateDto): void {
   });
 }
 
+filteredCars(cars: MyCarInfo[]){
 
+  
+}
 deleteTruck(truck: MyCarInfo): void {
   this.truckService.deleteTruck(truck.id).subscribe({
     next: () => {

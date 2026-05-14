@@ -15,9 +15,9 @@ export class CarService {
 
   constructor(private http: HttpClient) {}
 
-  loadCars(): void {
-    this.http.get<MyCarInfo[]>(this.apiUrl).subscribe(data => this.cars.next(data));
-  }
+  // loadCars(): void {
+  //   this.http.get<MyCarInfo[]>(this.apiUrl).subscribe(data => this.cars.next(data));
+  // }
 
    getCars() {
   //return this.http.get<ApiResponse<MyCarInfo[]>>('car');
@@ -27,19 +27,25 @@ export class CarService {
   addCar(newCar: MyCarCreateDto): Observable<ApiResponse<MyCarInfo>> {
     //return this.http.post<MyCar>(this.apiUrl, newTruck);
     return this.http.post<ApiResponse<MyCarInfo>>(this.apiUrl, newCar).pipe(
-    tap(() => this.loadCars())
+    tap(() => this.getCars())
     );
   }
 
 
 updateCar(id: number, payload: MyCarUpdateDto): Observable<MyCarInfo> {
   return this.http.put<MyCarInfo>(`${this.apiUrl}/${id}`, payload).pipe(
-    tap(() => this.loadCars()) // reload the cars after update
+    tap(() => this.getCars()) // reload the cars after update
   );
 }
 
   deleteCar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  searchVehicles(text: string): Observable<ApiResponse<MyCarInfo[]>> {
+    return this.http.get<ApiResponse<MyCarInfo[]>>(
+      `${this.apiUrl}/search?text=${encodeURIComponent(text)}`
+    );
   }
 }
 

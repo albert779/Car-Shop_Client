@@ -1,11 +1,16 @@
 <h2 style="text-align:center;">🚛 Truck List</h2>
 
-
-
 <app-add-item-button (saved)="addTruck($event)"></app-add-item-button>
+<app-search
+  [source]="trucks()"
+  [keys]="['model', 'color', 'price']"
+  [searchValue]="searchText"
+  (result)="filteredTrucks.set($event)">
+</app-search>
+
 
 <ul class="car-list">
-@for (truck of trucks(); track truck.id){
+@for (truck of filteredTrucks(); track truck.id){
    <li>
      <app-item
   [itemInfo]="truck"

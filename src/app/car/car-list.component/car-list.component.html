@@ -6,8 +6,15 @@
 
 <app-add-item-button (saved)="addCar($event)"></app-add-item-button>
 
+<app-search
+  [source]="cars()"
+  [keys]="['model', 'color', 'price']"
+  [searchValue]="searchText"
+  (result)="filteredCars.set($event)">
+</app-search>
+
 <ul class="car-list">
-  <li *ngFor="let car of cars(); trackBy: trackByCarId">
+  <li *ngFor="let car of filteredCars(); trackBy: trackByCarId">
     <app-item
       [itemInfo]="car"
       type="car"
