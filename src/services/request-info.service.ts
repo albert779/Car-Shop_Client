@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class RequestInfoService {
 
-  private apiUrl = 'http://localhost:5104/api/request';
+  private apiUrl = 'VehicleRequest';
 
   constructor(private http: HttpClient) {}
 

@@ -56,18 +56,7 @@ export class VehicleService {
   // GET ALL
   // =========================
 
-  /*
   getAll(
-    type: VehicleType
-  ): Observable<ApiResponse<MyCarInfo[]>> {
-
-    return this.http.get<ApiResponse<MyCarInfo[]>>(
-      //`${this.apiUrl}?type=${VehicleType[type]}`
-      `${this.apiUrl}?type=${type}`
-    );
-  }
-    */
-   getAll(
   type: VehicleType
 ): Observable<ApiResponse<MyCarInfo[]>> {
 
