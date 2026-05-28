@@ -2,19 +2,40 @@
 
 
 import { Routes } from '@angular/router';
-import { CarListComponent } from './car/car-list.component/car-list.component';
-import { TruckListComponent } from './truck/truck-list.component/truck-list.component';
+//import { CarListComponent } from './car/car-list.component/car-list.component';
+//import { TruckListComponent } from './truck/truck-list.component/truck-list.component';
+import { VehicleListComponent } from './vehicle/vehicle-list.component/vehicle-list.component';
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
 import { authGuard } from '../guards/auth-guard';
 import { NotFoundComponent } from '../app/not-found/not-found';
+import { VehicleType } from './models/vehicle-type';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  { path: 'cars', component: CarListComponent, canActivate: [authGuard] },
-  { path: 'trucks', component: TruckListComponent, canActivate: [authGuard] },
+ // { path: 'cars', component: CarListComponent, canActivate: [authGuard] },
+ // { path: 'trucks', component: TruckListComponent, canActivate: [authGuard] },
+ //{ path: 'vehicle', component: VehicleListComponent, canActivate: [authGuard] },
+
+{
+  path: 'cars',
+  component: VehicleListComponent,
+  canActivate: [authGuard],
+  data: {
+    vehicleTypeId: VehicleType.Car
+  }
+},
+{
+  path: 'trucks',
+  component: VehicleListComponent,
+  canActivate: [authGuard],
+  data: {
+    vehicleTypeId: VehicleType.Truck
+  }
+},
+
 
   {
     path: 'admin',

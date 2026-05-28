@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
-import { MaterialModule } from './app/car/modules/material.module';
+import { MaterialModule } from './app/shared/material.module';
 
 import { loadingInterceptor } from './interceptors/loading.interceptor';
 import { apiBaseUrlInterceptor } from './interceptors/api-base-url.interceptor';

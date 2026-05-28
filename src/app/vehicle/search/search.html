@@ -1,0 +1,15 @@
+ <div class="search-container">
+
+  <input
+    #searchInput
+    type="text"
+    placeholder="Search by model, color, budget..."
+    (keyup)="search(searchInput.value)"
+  />
+
+  <button (click)="search(searchInput.value)">
+    <span class="icon">⌕</span>
+  </button>
+
+</div>
+

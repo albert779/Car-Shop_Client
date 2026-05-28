@@ -1,0 +1,39 @@
+<h2 style="text-align:center;">
+  {{ title }}
+</h2>
+
+<app-add-item-button
+  (saved)="addVehicle($event)">
+</app-add-item-button>
+
+<app-search
+  [source]="vehicles()"
+  [keys]="['model', 'color', 'price']"
+  (result)="onSearchResult($event)">
+</app-search>
+
+<ul class="car-list">
+
+  @for (vehicle of filteredVehicles(); track vehicle.id) {
+
+    <li>
+
+      <app-item
+        [itemInfo]="vehicle"
+
+        [type]="vehicleTypeId === 1? 'car': 'truck'"
+
+        (edit)="editVehicle($event)"
+
+        (delete)="deleteVehicle($event)"
+
+        (viewDetails)="detailsVehicle($event)"
+
+        (requestInfo)="openRequestInfoDialog($event)">
+      </app-item>
+
+    </li>
+
+  }
+
+</ul>

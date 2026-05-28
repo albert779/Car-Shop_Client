@@ -117,6 +117,7 @@ submit(): void {
       // (optional but recommended for dialogs)
       this.storage.setValueInStore('user', JSON.stringify(user));
 
+      //this.router.navigateByUrl('/cars');
       this.router.navigateByUrl('/cars');
     },
 
