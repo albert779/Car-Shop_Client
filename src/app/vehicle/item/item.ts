@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogAddOrEdit } from '../dialog-add-or-edit/dialog-add-or-edit';
+import { DialogAddOrEdit } from '../../shared/dialog-add-or-edit/dialog-add-or-edit';
 import { MyCarInfo } from '../../models/myCar';
 import { MyCarUpdateDto } from '../../models/MyCarUpdateDto';
 

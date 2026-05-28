@@ -10,13 +10,3 @@ export interface MyCarInfo {
  //type: string;
    vehicleTypeId: number;
 }
-
-
-
-
-
-
-export const environment = {
-  production: false,
-  apiBaseUrl: 'http://localhost:5104/api'
-};

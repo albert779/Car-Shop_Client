@@ -2,23 +2,19 @@ import { Component, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-
-import { Item } from '../../shared/item/item';
-import { AddItemButtonComponent } from '../../shared/add-item-button/add-item-button';
 import { SearchComponent } from '../search/search';
-
 import { CarDetailsDialogComponent } from '../../dialogs/car-details-dialog.component/car-details-dialog.component';
 import { RequestInfoComponent } from '../request-info/request-info';
-
 import { AuthService } from '../../auth/auth';
 import { LocalStorageService } from '../../../services/local-storage';
 import { VehicleService } from './vehicle.service';
-
 import { MyCarInfo } from '../../models/myCar';
 import { MyCarCreateDto } from '../../models/myCarCreateDto';
 import { MyCarUpdateDto } from '../../models/MyCarUpdateDto';
 import { VehicleType } from '../../models/vehicle-type';
 import { ActivatedRoute } from '@angular/router';
+import { Item } from '../item/item';
+import { AddItemButtonComponent } from '../add-item-button/add-item-button';
 
 
 @Component({

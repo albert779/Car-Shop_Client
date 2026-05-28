@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogAddOrEdit } from '../dialog-add-or-edit/dialog-add-or-edit';
+import { DialogAddOrEdit } from '../../shared/dialog-add-or-edit/dialog-add-or-edit';
 import { MyCarCreateDto } from '../../models/myCarCreateDto';
 import { MyCarInfo } from '../../models/myCar';
 @Component({
@@ -22,7 +22,6 @@ export class AddItemButtonComponent {
     width: '650px',
     maxWidth: '95vw',
     maxHeight: '90vh',
-    data: null
   });
 
     dialogRef.afterClosed().subscribe((result: MyCarCreateDto | MyCarInfo | undefined) => {
