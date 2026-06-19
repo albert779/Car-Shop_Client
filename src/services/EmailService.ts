@@ -38,7 +38,10 @@ export interface RequestInfoDto {
   lastName: string;
   phone: string;
   email: string;
-  details: string;
+  message: string;
+  model: string;
+  color: string;
+  price: string;
 }
 
 @Injectable({

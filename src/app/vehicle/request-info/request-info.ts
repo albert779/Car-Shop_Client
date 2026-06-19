@@ -123,7 +123,7 @@ send(): void {
       model: this.form.value.model,
       color: this.form.value.color,
       price: this.form.value.price,
-      details: this.form.value.message // 🔥 correct field
+      message: this.form.value.message // 🔥 correct field
   };
 
   console.log('SENDING REQUEST:', payload);
