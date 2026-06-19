@@ -12,7 +12,12 @@
   <input formControlName="phone" readonly placeholder="Phone">
 
   <textarea formControlName="message" placeholder="Write your message"></textarea>
-
+  <!--
+  <div *ngIf="requestForm.get('message')?.touched && requestForm.get('message')?.invalid"
+     style="color:red;">
+  Message is required
+</div>
+-->
   <button type="button" (click)="send()">Send Request</button>
   <button type="button" (click)="close()">Cancel</button>
 

@@ -49,14 +49,14 @@ export class RegisterComponent {
   ) {
     // ✅ Initialize the form here, after fb is available
     this.regForm = this.fb.group({
-      id: ['', Validators.required],
-      name: ['', Validators.required],
-      lastname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      birthdate: ['', Validators.required],
+      //id: ['', Validators.required],
+      FirstName: ['', Validators.required],
+      LastName: ['', Validators.required],
+      Email: ['', [Validators.required, Validators.email]],
+      Password: ['', Validators.required],
+      BirthDate: ['', Validators.required],
       
-      phone: ['', Validators.required]
+      Phone: ['', Validators.required]
     });
   
 
@@ -64,6 +64,7 @@ export class RegisterComponent {
     // ✅ react to result with effect
    effect(() => {
   const response = this.registerResult();
+  console.log('Register response:', response);
   if (!response) return;
 
   if (response.success) {
@@ -89,13 +90,13 @@ submit() {
 
   
  this.submitSignal.set({
-      id: Number(raw.id),
-      name: raw.name,
-      lastname: raw.lastname,
-      email: raw.email,
-      password: raw.password,
-      birthdate: raw.birthdate,
-      phone: raw.phone,
+      //id: Number(raw.id),
+      FirstName: raw.FirstName,
+      LastName: raw.LastName,
+      Email: raw.Email,
+      Password: raw.Password,
+      BirthDate: raw.BirthDate,
+      Phone: raw.Phone,
        roleId: 2 
       });
   }
