@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule,FormGroup } from '@angular/forms';
 import { ApiResponse, AuthService } from '../auth';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { EMPTY } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { NotificationService } from '../../shared/services/notification';
 
 @Component({
   selector: 'app-register',
@@ -28,6 +29,8 @@ import { toObservable } from '@angular/core/rxjs-interop';
   styleUrls: ['./register.css']
 })
 export class RegisterComponent {
+private notification = inject(NotificationService);
+
   regForm: FormGroup;  // just declare it here
   //submitted = false;
   submitted = signal(false);
@@ -61,6 +64,7 @@ export class RegisterComponent {
   
 
 
+    
     // ✅ react to result with effect
    effect(() => {
   const response = this.registerResult();
@@ -69,12 +73,19 @@ export class RegisterComponent {
 
   if (response.success) {
     // Navigate to login after successful registration
+    this.notification.success('Registration successful! Please log in.');
     this.router.navigate(['/login']);
   } else {
-    alert(response.message);
+    this.notification.error(response.message);
+    
+
   }
 });
+
 }
+
+
+
 
 submit() {
   //this.submitted = true;

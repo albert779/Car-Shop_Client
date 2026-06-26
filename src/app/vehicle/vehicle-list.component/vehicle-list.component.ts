@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { VehicleType } from '../../models/vehicle-type';
 import { ActivatedRoute } from '@angular/router';
 import { Item } from '../item/item';
 import { AddItemButtonComponent } from '../add-item-button/add-item-button';
-
+import { NotificationService } from '../../shared/services/notification';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -32,7 +32,7 @@ import { AddItemButtonComponent } from '../add-item-button/add-item-button';
   ]
 })
 export class VehicleListComponent implements OnInit {
-
+private notification = inject(NotificationService);
   public VehicleType = VehicleType;
 
   // 🚗 1 = Car
@@ -241,7 +241,8 @@ onSearchResult(results: MyCarInfo[]): void {
 
     if (!this.authService.isLoggedIn()) {
 
-      alert('Please log in first.');
+      //alert('Please log in first.');
+      this.notification.error('Please log in first.');
 
       return;
     }
@@ -255,7 +256,8 @@ onSearchResult(results: MyCarInfo[]): void {
 
       if (!stored) {
 
-        alert('User info missing.');
+        //alert('User info missing.');
+        this.notification.error('User info missing.');
 
         return;
       }
@@ -271,7 +273,8 @@ onSearchResult(results: MyCarInfo[]): void {
 
         console.error(error);
 
-        alert('Invalid user data.');
+        //alert('Invalid user data.');
+        this.notification.error('Invalid user data.');
 
         return;
       }

@@ -13,6 +13,7 @@ import { MaterialModule } from './app/shared/material.module';
 import { loadingInterceptor } from './interceptors/loading.interceptor';
 import { apiBaseUrlInterceptor } from './interceptors/api-base-url.interceptor';
 import { AuthInterceptor } from './interceptors/auth-interceptor'; // functional
+import { notificationInterceptor } from './interceptors/notification-interceptors';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -24,7 +25,8 @@ bootstrapApplication(AppComponent, {
       withInterceptors([
         loadingInterceptor,
         apiBaseUrlInterceptor,
-        AuthInterceptor, // ✅ attach token to requests
+        AuthInterceptor, // ✅ attach token to requests.
+        notificationInterceptor
       ])
     ),
 

@@ -1,6 +1,6 @@
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   Validators,
@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LocalStorageService } from '../../../services/local-storage';
 import { jwtDecode } from 'jwt-decode';
+import { NotificationService } from '../../shared/services/notification';
 
 interface LoginResponse {
   firstName: string;
@@ -43,7 +44,8 @@ interface LoginResponse {
   styleUrls: ['./login.css']
 })
 export class LoginComponent implements OnInit {
-
+ 
+  private notification = inject(NotificationService);
   submitted = false;
   loginForm: FormGroup;
 
@@ -76,7 +78,8 @@ submit(): void {
       const data = response?.data;
 
       if (!data?.token) {
-        alert('Login failed');
+        //alert('Login failed');
+         this.notification.error('Login failed');
         return;
       }
 
@@ -95,7 +98,8 @@ submit(): void {
 
       if (!userId) {
         console.error('User ID missing!');
-        alert('Login failed: user id missing');
+        //alert('Login failed: user id missing');
+         this.notification.error('Login failed: user id missing');
         return;
       }
 
@@ -118,13 +122,14 @@ submit(): void {
       this.storage.setValueInStore('user', JSON.stringify(user));
 
       //this.router.navigateByUrl('/cars');
+      this.notification.success('Login successful!');
       this.router.navigateByUrl('/cars');
     },
 
     error: (err) => {
       console.error(err);
       this.auth.logout();
-      alert('Login failed!');
+      this.notification.error('Login failed!');
     }
   });
 }

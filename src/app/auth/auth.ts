@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-//import { Observable, tap } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage';
 import { Observable, tap, map } from 'rxjs';
 import { switchMap } from 'rxjs';
@@ -43,20 +42,7 @@ export class AuthService {
 
   // ===== LOGIN =====
 
-  /*
-  login(data: { email: string; password: string }): Observable<ApiResponse<string>> {
-    return this.http
-      .post<ApiResponse<string>>(`${this.API}/login`, data)
-      .pipe(
-        tap((response: ApiResponse<string>) => {
-          if (response.success && response.data) {
-            // Save ONLY the token string
-            this.storage.setValueInStore(this.TOKEN_KEY, response.data);
-          }
-        })
-      );
-  }
-   */
+  
 login(data: { email: string; password: string }): Observable<ApiResponse<LoginResponse>> {
   return this.http.post<ApiResponse<LoginResponse>>(`${this.API}/login`, data).pipe(
     tap(response => {
@@ -79,19 +65,6 @@ login(data: { email: string; password: string }): Observable<ApiResponse<LoginRe
     );
   }
 
-  /*
-setUser(user: LoggedUser): void {
-  this.storage.setValueInStore(this.TOKEN_KEY, user.token);
-  this.storage.setValueInStore(this.USER_KEY, JSON.stringify(user));
-}
-
-
-   // ✅ NEW: Get logged-in user info
-  getUser(): LoggedUser | null {
-    const user = this.storage.getValueFromStore(this.USER_KEY);
-    return user ? JSON.parse(user) : null;
-  }
-*/
 
 setUser(user: LoggedUser): void {
   // Save token

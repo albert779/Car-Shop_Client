@@ -3,6 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/materia
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RequestInfoService } from '../../../services/request-info.service';
+import { NotificationService } from '../../shared/services/notification';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-request-info',
@@ -12,15 +14,20 @@ import { RequestInfoService } from '../../../services/request-info.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    //NotificationService,
+    MatSnackBarModule
+
   ]
 })
 export class RequestInfoComponent implements OnInit {
 
+  private notification = inject(NotificationService);
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<RequestInfoComponent>);
   private data: any = inject(MAT_DIALOG_DATA);
   private requestService = inject(RequestInfoService);
+ 
 
   form = this.fb.group({
     firstName: [''],
@@ -95,7 +102,8 @@ send(): void {
       user = JSON.parse(user);
     } catch (e) {
       console.error('Invalid user data', e);
-      alert('User data error. Please login again.');
+      //alert('User data error. Please login again.');
+      this.notification.error('User data error. Please login again.');
       return;
     }
   }
@@ -108,7 +116,7 @@ send(): void {
   // ⚠️ strict validation
   if (!carId || !userId || !message?.length) {
     console.error("Missing required fields", { carId, userId, message });
-    alert("Missing required data");
+    //this.notification.error("Missing required data");
     return;
   }
 
@@ -131,13 +139,18 @@ send(): void {
   this.requestService.sendRequest(payload).subscribe({
     next: (res) => {
       console.log("SUCCESS:", res);
-      alert('Request sent successfully');
+      this.notification.success('Request sent successfully');
       this.dialogRef?.close(true);
     },
     error: (err) => {
       console.error('Request failed:', err);
-      alert('Failed to send request');
+      this.notification.error('Failed to send request');
     }
   });
+
+  
+
 }
+
+
 }
