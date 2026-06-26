@@ -25,7 +25,6 @@ export class ErrorMessageResolverService {
   }
   private getErrorMessageOrUndefined(error: HttpErrorResponse): string | undefined {
 
-    debugger;
      // API returned ApiResponse<T>
     const apiResponse = error.error as Partial<ApiResponse<unknown>>;
 
