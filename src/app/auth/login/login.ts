@@ -129,7 +129,6 @@ submit(): void {
     error: (err) => {
       console.error(err);
       this.auth.logout();
-      this.notification.error('Login failed!');
     }
   });
 }

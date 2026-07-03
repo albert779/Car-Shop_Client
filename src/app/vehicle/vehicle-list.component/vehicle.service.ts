@@ -38,11 +38,7 @@ export class VehicleService {
           this.vehicles.set(res.data);
 
           console.log('📥 Vehicles loaded:', res.data);
-
-        } else {
-
-          console.error('❌ API Error:', res.message);
-        }
+      }
       },
 
       error: (err) => {

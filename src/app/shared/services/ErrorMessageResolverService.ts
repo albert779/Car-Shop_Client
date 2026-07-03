@@ -25,11 +25,21 @@ export class ErrorMessageResolverService {
   }
   private getErrorMessageOrUndefined(error: HttpErrorResponse): string | undefined {
 
+
+     // Request never reached the server
+    if (error.status === 0) {
+      return this.getStandardAPIErorr(error);
+    }
+
+    // Server returned HTML or plain text instead of JSON
+    if (typeof error.error === 'string') {
+      return this.getStandardAPIErorr(error);
+    }
      // API returned ApiResponse<T>
     const apiResponse = error.error as Partial<ApiResponse<unknown>>;
 
     if (apiResponse.success === false) {
-      return apiResponse.message;
+      return apiResponse.data as string; // Assuming the error message is in the data property
     }
 
     return this.getStandardAPIErorr(error);
@@ -46,6 +56,9 @@ export class ErrorMessageResolverService {
       case 0:
         return 'Unable to connect to the server.';
 
+      case 400:
+        return 'Bad request, Invalid input data';
+
       case 401:
         return 'Unauthorized.';
 
@@ -57,6 +70,15 @@ export class ErrorMessageResolverService {
 
       case 500:
         return 'Internal server error.';
+
+      case 502:
+        return 'Bad gateway.';
+
+      case 503:
+        return 'Service unavailable.';
+
+      case 504:
+        return 'Gateway timeout.';
 
       default:
         return  undefined;

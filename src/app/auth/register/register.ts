@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule,FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { ApiResponse, AuthService } from '../auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -29,7 +29,7 @@ import { NotificationService } from '../../shared/services/notification';
   styleUrls: ['./register.css']
 })
 export class RegisterComponent {
-private notification = inject(NotificationService);
+  private notification = inject(NotificationService);
 
   regForm: FormGroup;  // just declare it here
   //submitted = false;
@@ -39,11 +39,11 @@ private notification = inject(NotificationService);
 
   // convert Observable → Signal
   registerResult = toSignal<ApiResponse<string>>(
-  toObservable(this.submitSignal).pipe(
-    switchMap(data => data ? this.auth.register(data) : EMPTY)
-  ),
-  { initialValue: null }
-);
+    toObservable(this.submitSignal).pipe(
+      switchMap(data => data ? this.auth.register(data) : EMPTY)
+    ),
+    { initialValue: null }
+  );
 
   constructor(
     private fb: FormBuilder,
@@ -58,14 +58,15 @@ private notification = inject(NotificationService);
       Email: ['', [Validators.required, Validators.email]],
       Password: ['', Validators.required],
       BirthDate: ['', Validators.required],
-      
+
       Phone: ['', Validators.required]
     });
-  
 
 
-    
+
+
     // ✅ react to result with effect
+    /*
    effect(() => {
   const response = this.registerResult();
   console.log('Register response:', response);
@@ -77,30 +78,41 @@ private notification = inject(NotificationService);
     this.router.navigate(['/login']);
   } else {
     this.notification.error(response.message);
-    
-
   }
 });
+*/
+    effect(() => {
+      const response = this.registerResult();
 
-}
+      console.log('Register response:', response);
 
+      if (!response) return;
 
-
-
-submit() {
-  //this.submitted = true;
-  this.submitted.set(true);
-
-  if (this.regForm.invalid) {
-    this.regForm.markAllAsTouched();
-     console.log("ok");
-    return;
+      if (response.success) {
+        this.notification.success('Registration successful! Please log in.');
+        this.router.navigate(['/login']);
+        return;
+      }
+    });
   }
 
-  const raw = this.regForm.getRawValue();
 
-  
- this.submitSignal.set({
+
+
+  submit() {
+    //this.submitted = true;
+    this.submitted.set(true);
+
+    if (this.regForm.invalid) {
+      this.regForm.markAllAsTouched();
+      console.log("ok");
+      return;
+    }
+
+    const raw = this.regForm.getRawValue();
+
+
+    this.submitSignal.set({
       //id: Number(raw.id),
       FirstName: raw.FirstName,
       LastName: raw.LastName,
@@ -108,7 +120,7 @@ submit() {
       Password: raw.Password,
       BirthDate: raw.BirthDate,
       Phone: raw.Phone,
-       roleId: 2 
-      });
+      roleId: 2
+    });
   }
 }

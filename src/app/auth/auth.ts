@@ -7,7 +7,7 @@ import { switchMap } from 'rxjs';
 
 export interface ApiResponse<T> {
   success: boolean;
-  message: string;
+  // message: string;
   data: T; // token will be here
   
 }
