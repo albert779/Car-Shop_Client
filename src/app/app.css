@@ -48,3 +48,18 @@
   font-weight: 600;
   cursor: pointer;
 }
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+app-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+}

@@ -1,0 +1,141 @@
+.table-card {
+
+    margin: 25px;
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+
+}
+
+
+
+table {
+
+    width:100%;
+
+}
+
+
+
+th {
+
+    background:#f5f5f5;
+    font-weight:600;
+    font-size:15px;
+
+}
+
+
+
+td, th {
+
+    padding:18px;
+
+}
+
+
+
+.vehicle {
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+}
+
+
+
+.vehicle img {
+
+    width:70px;
+    height:50px;
+
+    object-fit:cover;
+
+    border-radius:8px;
+
+}
+
+
+
+.vehicle span {
+
+    color:#777;
+    font-size:13px;
+
+}
+
+
+
+
+
+.status {
+
+    padding:5px 15px;
+    border-radius:20px;
+    font-weight:600;
+
+}
+
+
+
+.pending {
+
+    background:#fff3cd;
+    color:#856404;
+
+}
+
+
+
+.approved {
+
+    background:#d4edda;
+    color:#155724;
+
+}
+
+
+
+.rejected {
+
+    background:#f8d7da;
+    color:#721c24;
+
+}
+
+
+
+
+button {
+
+    border-radius:8px;
+
+}
+
+
+
+mat-icon {
+
+    margin-right:5px;
+
+}
+
+
+.pending-chip {
+  background-color: #fff3cd !important;
+  color: #856404 !important;
+  font-weight: 600;
+}
+
+.approved-chip {
+  background-color: #d4edda !important;
+  color: #155724 !important;
+  font-weight: 600;
+}
+
+.rejected-chip {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+  font-weight: 600;
+}

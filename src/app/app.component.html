@@ -1,23 +1,49 @@
 @if (auth.isLoggedIn()) {
+
+
  <nav style="padding: 1rem; background: #1976d2; color: white;">
+   
+    @if(!isAdmin){
   <a routerLink="/cars" routerLinkActive="active"
      style="color: white; text-decoration: none; margin-right: 1rem;">
      🚗 Cars
   </a>
-
+    
   <a routerLink="/trucks" routerLinkActive="active"
      style="color: white; text-decoration: none;">
      🚛 Trucks
   </a>
+}
   <div class="nav-right" style="float: right;">
      <button class="logout-btn" (click)="logout()">Logout</button>
   </div>
 </nav>
+
 }
+<!--@if (isAdmin) {-->
+<div class="layout">
+<app-sidebar></app-sidebar>
+<main class="content">
 <router-outlet></router-outlet>
+</main>
+</div>
+<!--}-->
+<!--@else {-->
+
+<!--  <router-outlet></router-outlet>-->
+
+<!--}-->
 <!-- Loading spinner -->
 @if (loadingService.loading()) {
   <div class="spinner-overlay">
     <mat-spinner diameter="60"></mat-spinner>
   </div>
 }
+
+<p style="color:red">
+  Role ID: {{ auth.getRoleId() }}
+</p>
+
+<p style="color:red">
+  Is Admin: {{ isAdmin }}
+</p>

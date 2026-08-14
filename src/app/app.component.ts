@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingService } from '../services/loading.service';
-import { AuthService } from './auth/auth';
+//import { AuthService } from './auth/auth';
+import { SidebarComponent } from '../sidebar/sidebar';
+//import { MyRequestsComponent } from '../my-requests/my-requests';
+import { AuthService } from '../services/auth.service';
+
 
 @Component({
   selector: 'app-root',
@@ -12,7 +16,9 @@ import { AuthService } from './auth/auth';
     CommonModule,
     RouterLink,
     RouterOutlet,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    SidebarComponent,
+    //MyRequestsComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.css']   // ✅ fixed typo
@@ -25,6 +31,9 @@ export class AppComponent {
     public auth: AuthService,
     public router: Router
   ) {
+  }
+get isAdmin(): boolean {
+    return this.auth.getRoleId() === 1;
   }
 
 

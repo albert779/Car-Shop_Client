@@ -1,0 +1,70 @@
+<!--
+<div class="my-requests-container">
+<h2>My Requests</h2>
+
+<div class="cards">
+
+  <div class="card total">
+    <div class="number">{{dashboard.totalRequests}}</div>
+    <div>Total Requests</div>
+  </div>
+
+  <div class="card pending">
+    <div class="number">{{dashboard.pending}}</div>
+    <div>Pending</div>
+  </div>
+
+  <div class="card approved">
+    <div class="number">{{dashboard.approved}}</div>
+    <div>Approved</div>
+  </div>
+
+  <div class="card rejected">
+    <div class="number">{{dashboard.rejected}}</div>
+    <div>Rejected</div>
+  </div>
+
+<app-filter (filterChanged)="loadRequests($event)"></app-filter>
+
+<app-table-of-requests [requests]="requests"></app-table-of-requests>
+</div>
+</div>
+-->
+
+<div class="my-requests-container">
+
+  <h2>My Requests</h2>
+
+  <div class="cards">
+
+    <div class="card total">
+      <div class="number">{{dashboard.totalRequests}}</div>
+      <div>Total Requests</div>
+    </div>
+
+    <div class="card pending">
+      <div class="number">{{dashboard.pendingRequests}}</div>
+      <div>Pending</div>
+    </div>
+
+    <div class="card approved">
+      <div class="number">{{dashboard.approvedRequests}}</div>
+      <div>Approved</div>
+    </div>
+
+    <div class="card rejected">
+      <div class="number">{{dashboard.rejectedRequests}}</div>
+      <div>Rejected</div>
+    </div>
+
+  </div>
+
+  <app-filter
+    (filterChanged)="loadRequests($event)">
+  </app-filter>
+
+  <app-table-of-requests
+    [requests]="requests">
+  </app-table-of-requests>
+
+</div>

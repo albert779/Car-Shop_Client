@@ -8,6 +8,7 @@ import { LocalStorageService } from './local-storage';
 // API response contains only token
 interface LoginResponse {
   token: string;
+   roleId: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -15,7 +16,7 @@ export class AuthService {
 
   private readonly API_LOGIN = 'http://localhost:5104/api/auth/login';
   private readonly TOKEN_KEY = 'token';
-
+  private readonly ROLE_KEY = 'roleId';
   constructor(private http: HttpClient, private storage: LocalStorageService) {}
 
   // ===== LOGIN =====
@@ -31,6 +32,10 @@ export class AuthService {
 
           // ✅ Save ONLY token string
           this.storage.setValueInStore(this.TOKEN_KEY, res.token);
+            this.storage.setValueInStore(
+            this.ROLE_KEY,
+            res.roleId.toString()
+          );
 
           // return token if needed
           return res.token;
@@ -41,6 +46,7 @@ export class AuthService {
   // ===== LOGOUT =====
   logout(): void {
     this.storage.removeValueFromStore(this.TOKEN_KEY);
+    this.storage.removeValueFromStore(this.ROLE_KEY);
   }
 
   // ===== GET TOKEN =====
@@ -52,4 +58,8 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
+
+  getRoleId(): number {
+  return Number(this.storage.getValueFromStore(this.ROLE_KEY));
+}
 }

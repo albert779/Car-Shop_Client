@@ -1,0 +1,104 @@
+<div class="filter-container">
+
+  <!-- Search -->
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+
+    <input
+      matInput
+      placeholder="Search..."
+      [(ngModel)]="filter.search">
+
+  </mat-form-field>
+
+
+  <!-- Status -->
+  <mat-form-field appearance="outline">
+
+    <mat-label>Status</mat-label>
+
+    <mat-select [(ngModel)]="filter.statusId">
+
+      <mat-option [value]="null">
+        All Status
+      </mat-option>
+
+      <mat-option [value]="1">
+        Pending
+      </mat-option>
+
+      <mat-option [value]="2">
+        Approved
+      </mat-option>
+
+      <mat-option [value]="3">
+        Rejected
+      </mat-option>
+
+    </mat-select>
+
+  </mat-form-field>
+
+
+ <!-- From Date -->
+<mat-form-field appearance="outline">
+
+  <mat-label>From Date</mat-label>
+
+  <input
+    matInput
+    [matDatepicker]="fromPicker"
+    [(ngModel)]="filter.fromDate">
+
+  <mat-datepicker-toggle
+    matIconSuffix
+    [for]="fromPicker">
+  </mat-datepicker-toggle>
+
+  <mat-datepicker #fromPicker></mat-datepicker>
+
+</mat-form-field>
+
+
+<!-- To Date -->
+<mat-form-field appearance="outline">
+
+  <mat-label>To Date</mat-label>
+
+  <input
+    matInput
+    [matDatepicker]="toPicker"
+    [(ngModel)]="filter.toDate">
+
+  <mat-datepicker-toggle
+    matIconSuffix
+    [for]="toPicker">
+  </mat-datepicker-toggle>
+
+  <mat-datepicker #toPicker></mat-datepicker>
+
+</mat-form-field>
+  <!-- Search Button -->
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="applyFilter()">
+
+    <mat-icon>search</mat-icon>
+    Search
+
+  </button>
+
+
+  <!-- Clear Button -->
+  <button
+    mat-stroked-button
+    color="warn"
+    (click)="clearFilter()">
+
+    <mat-icon>clear</mat-icon>
+    Clear
+
+  </button>
+
+</div>

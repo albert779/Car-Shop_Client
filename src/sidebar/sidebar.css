@@ -1,0 +1,55 @@
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: linear-gradient(180deg, #10244d, #142d63);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 18px;
+    box-sizing: border-box;
+}
+
+.logo {
+    margin-bottom: 40px;
+}
+
+.logo h2 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+nav a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: white;
+    text-decoration: none;
+    padding: 14px 18px;
+    border-radius: 12px;
+    transition: .25s;
+    cursor: pointer;
+}
+
+nav a:hover {
+    background: rgba(255,255,255,.12);
+}
+
+nav a.active {
+    background: #2d6cff;
+    box-shadow: 0 6px 18px rgba(45,108,255,.35);
+}
+
+.material-icons {
+    font-size: 24px;
+}
+
+.logout {
+    margin-top: auto;
+}

@@ -24,6 +24,7 @@ interface LoginResponse {
   email: string;
   phone: string;
   token: string;
+   roleId: number; 
 }
 
 
@@ -106,6 +107,11 @@ submit(): void {
       // ✅ Save token
       this.auth.setToken(data.token);
 
+       this.storage.setValueInStore(
+            'roleId',
+            data.roleId.toString()
+          );
+
       // ✅ Save user (NOW includes id)
       const user = {
         id:  Number(userId), // 🔥 FIX for your "undefined userId" issue
@@ -113,6 +119,7 @@ submit(): void {
         lastName: data.lastName,
         email: data.email,
         phone: data.phone,
+         roleId: data.roleId,
         token: data.token
       };
 
@@ -123,7 +130,18 @@ submit(): void {
 
       //this.router.navigateByUrl('/cars');
       this.notification.success('Login successful!');
-      this.router.navigateByUrl('/cars');
+     // this.router.navigateByUrl('/cars');
+     if (data.roleId === 1) {
+
+            this.router.navigateByUrl('/dashboard');
+
+          }
+          else {
+
+            this.router.navigateByUrl('/cars');
+
+          }
+
     },
 
     error: (err) => {

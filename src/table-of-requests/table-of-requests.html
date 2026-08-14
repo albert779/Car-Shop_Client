@@ -1,0 +1,204 @@
+<mat-card class="table-card">
+
+  <table mat-table [dataSource]="requests" class="mat-elevation-z2">
+
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>
+        ID
+      </th>
+
+      <td mat-cell *matCellDef="let r">
+        #{{r.id}}
+      </td>
+    </ng-container>
+
+
+
+    <!-- Vehicle Column -->
+    <ng-container matColumnDef="vehicle">
+
+      <th mat-header-cell *matHeaderCellDef>
+        Vehicle
+      </th>
+
+
+      <td mat-cell *matCellDef="let r">
+
+        <div class="vehicle">
+
+          <img [src]="r.image">
+
+          <div class="vehicle-name">
+          <b>{{ r.color }} {{ r.vehicle }}</b>
+        </div>
+
+        <!-- Second line: Year -->
+        <div class="vehicle-year">
+          {{ r.year }}
+        </div>
+
+        </div>
+
+      </td>
+
+    </ng-container>
+
+
+
+
+    <!-- Message Column -->
+    <ng-container matColumnDef="message">
+
+      <th mat-header-cell *matHeaderCellDef>
+        Message
+      </th>
+
+      <td mat-cell *matCellDef="let r">
+        {{r.message}}
+      </td>
+
+    </ng-container>
+
+
+
+
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+
+      <th mat-header-cell *matHeaderCellDef>
+        Status
+      </th>
+
+
+      <td mat-cell *matCellDef="let r">
+
+        <!--
+        <mat-chip
+          class="status"
+          [class.pending]="r.status==='Pending'"
+          [class.approved]="r.status==='Approved'"
+          [class.rejected]="r.status==='Rejected'">
+
+          {{r.status}}
+
+        </mat-chip>
+      -->
+
+<mat-chip
+  highlighted
+  [ngClass]="{
+    'pending-chip': r.status === 'Pending',
+    'approved-chip': r.status === 'Approved',
+    'rejected-chip': r.status === 'Rejected'
+  }">
+  {{ r.status }}
+</mat-chip>
+
+      </td>
+
+    </ng-container>
+
+
+
+
+
+    <!-- Requested Date -->
+    <ng-container matColumnDef="requestedOn">
+
+      <th mat-header-cell *matHeaderCellDef>
+        Requested On
+      </th>
+
+
+      <td mat-cell *matCellDef="let r">
+
+        {{r.requestedOn | date:'MMM dd, yyyy'}}
+
+        <br>
+
+        {{r.requestedOn | date:'hh:mm a'}}
+
+      </td>
+
+    </ng-container>
+
+
+
+
+
+    <!-- Last Update -->
+    <ng-container matColumnDef="lastUpdate">
+
+      <th mat-header-cell *matHeaderCellDef>
+        Last Update
+      </th>
+
+
+      <td mat-cell *matCellDef="let r">
+
+        {{r.lastUpdate | date:'MMM dd, yyyy'}}
+
+        <br>
+
+        {{r.lastUpdate | date:'hh:mm a'}}
+
+      </td>
+
+    </ng-container>
+
+
+
+
+
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+
+      <th mat-header-cell *matHeaderCellDef>
+        Actions
+      </th>
+
+
+      <td mat-cell *matCellDef="let r">
+
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="view(r)">
+
+          <mat-icon>
+            visibility
+          </mat-icon>
+
+          View
+
+        </button>
+
+
+      </td>
+
+
+    </ng-container>
+
+
+
+
+
+    <tr mat-header-row
+        *matHeaderRowDef="displayedColumns">
+    </tr>
+
+
+    <tr mat-row
+        *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+
+
+  </table>
+
+
+</mat-card>

@@ -20,4 +20,10 @@ export class RequestInfoService {
   sendEmail(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/send`, data);
   }
+
+  getRequests(filter: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/list`, filter);
+  }
+
+
 }

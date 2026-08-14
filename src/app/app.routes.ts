@@ -10,31 +10,32 @@ import { RegisterComponent } from './auth/register/register';
 import { authGuard } from '../guards/auth-guard';
 import { NotFoundComponent } from '../app/not-found/not-found';
 import { VehicleType } from './models/vehicle-type';
+import { MyRequestsComponent } from '../my-requests/my-requests';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
- // { path: 'cars', component: CarListComponent, canActivate: [authGuard] },
- // { path: 'trucks', component: TruckListComponent, canActivate: [authGuard] },
- //{ path: 'vehicle', component: VehicleListComponent, canActivate: [authGuard] },
+  // { path: 'cars', component: CarListComponent, canActivate: [authGuard] },
+  // { path: 'trucks', component: TruckListComponent, canActivate: [authGuard] },
+  //{ path: 'vehicle', component: VehicleListComponent, canActivate: [authGuard] },
 
-{
-  path: 'cars',
-  component: VehicleListComponent,
-  canActivate: [authGuard],
-  data: {
-    vehicleTypeId: VehicleType.Car
-  }
-},
-{
-  path: 'trucks',
-  component: VehicleListComponent,
-  canActivate: [authGuard],
-  data: {
-    vehicleTypeId: VehicleType.Truck
-  }
-},
+  {
+    path: 'cars',
+    component: VehicleListComponent,
+    canActivate: [authGuard],
+    data: {
+      vehicleTypeId: VehicleType.Car
+    }
+  },
+  {
+    path: 'trucks',
+    component: VehicleListComponent,
+    canActivate: [authGuard],
+    data: {
+      vehicleTypeId: VehicleType.Truck
+    }
+  },
 
 
   {
@@ -49,6 +50,13 @@ export const routes: Routes = [
     loadComponent: () => import('../unauthorized/unauthorized').then(m => m.UnauthorizedComponent)
   },
 
+  {
+    canActivate: [authGuard],
+    path: 'my-requests',
+    component: MyRequestsComponent
+
+  },
+
   // Default route
   { path: '', redirectTo: 'cars', pathMatch: 'full' },
 
@@ -57,4 +65,6 @@ export const routes: Routes = [
     path: '**',
     loadComponent: () => import('../app/not-found/not-found').then(m => m.NotFoundComponent)
   }
+
+
 ];
