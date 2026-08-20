@@ -14,7 +14,7 @@ interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private readonly API_LOGIN = 'http://localhost:5104/api/auth/login';
+  private readonly API_LOGIN = 'auth/login';
   private readonly TOKEN_KEY = 'token';
   private readonly ROLE_KEY = 'roleId';
   constructor(private http: HttpClient, private storage: LocalStorageService) {}
