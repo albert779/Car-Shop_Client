@@ -3,7 +3,7 @@
 
  <nav style="padding: 1rem; background: #1976d2; color: white;">
    
-    @if(!isAdmin){
+   
   <a routerLink="/cars" routerLinkActive="active"
      style="color: white; text-decoration: none; margin-right: 1rem;">
      🚗 Cars
@@ -13,26 +13,25 @@
      style="color: white; text-decoration: none;">
      🚛 Trucks
   </a>
-}
+
   <div class="nav-right" style="float: right;">
      <button class="logout-btn" (click)="logout()">Logout</button>
   </div>
 </nav>
 
 }
-<!--@if (isAdmin) {-->
+
 <div class="layout">
-<app-sidebar></app-sidebar>
+<app-sidebar *ngIf="isManager()"></app-sidebar>
 <main class="content">
 <router-outlet></router-outlet>
 </main>
 </div>
-<!--}-->
-<!--@else {-->
 
-<!--  <router-outlet></router-outlet>-->
 
-<!--}-->
+  <!--<router-outlet></router-outlet>-->
+
+
 <!-- Loading spinner -->
 @if (loadingService.loading()) {
   <div class="spinner-overlay">
@@ -40,6 +39,7 @@
   </div>
 }
 
+<!--
 <p style="color:red">
   Role ID: {{ auth.getRoleId() }}
 </p>
@@ -47,3 +47,5 @@
 <p style="color:red">
   Is Admin: {{ isAdmin }}
 </p>
+
+-->

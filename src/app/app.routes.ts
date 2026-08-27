@@ -60,7 +60,10 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: LoginComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: {
+      role: 'Manager'
+    }
   },
 
   {
@@ -68,26 +71,35 @@ export const routes: Routes = [
     component: LoginComponent,
     canActivate: [authGuard],
     data: {
-      role: 'Admin'
+      role: 'Manager'
     }
   },
 
   {
     path: 'messages',
     component: LoginComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: {
+      role: 'Manager'
+    }
   },
 
   {
     path: 'profile',
     component: LoginComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: {
+      role: 'Manager'
+    }
   },
 
   {
     path: 'settings',
     component: LoginComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: {
+      role: 'Manager'
+    }
   },
 
   // 404 – MUST BE LAST
