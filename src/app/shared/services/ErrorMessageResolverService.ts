@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { ApiResponse } from "../../auth/auth";
 import { Injectable } from "@angular/core";
+import { ApiResponse } from "../../../services/auth.service";
 
 @Injectable({
   providedIn: 'root'

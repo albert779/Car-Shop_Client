@@ -1,10 +1,9 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from '../app/auth/auth';
+import { CanActivateFn, Router } from '@angular/router';
 import { LocalStorageService } from '../services/local-storage';
+import { AuthService } from '../services/auth.service';
 
 
-const roleKey = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
@@ -20,23 +19,29 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (!token) {
     storage.setValueInStore(REDIRECT_URL_KEY, url);
     router.navigate(['/login']);
-    //return router.createUrlTree(['/login']);
     return false;
   }
 
-  const skip = !route.data['role'];
-  if (skip) {
+
+  const requiredRoleName = route.data?.['role'];
+
+  if (!requiredRoleName) {
     return true;
   }
 
-  const requiredRole = route.data?.['role'];
-  const userRole = authService.getUserRole(roleKey);
-  const isCorrectRole = userRole === requiredRole;
+  const user = authService.getUser();
 
-  if (!isCorrectRole) {
+  // no use but has role to check
+  if (user == null) {
+    router.navigate(['/login']);
+    return false;
+  }
+  debugger;
+  if (user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] !== requiredRoleName) {
     router.navigate(['/unauthorized']);
     return false;
   }
+
 
   return true;
 };

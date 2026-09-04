@@ -4,13 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { ApiResponse } from '../../auth/auth';
 
 import { MyCarInfo } from '../../models/myCar';
 import { MyCarCreateDto } from '../../models/myCarCreateDto';
 import { MyCarUpdateDto } from '../../models/MyCarUpdateDto';
 
 import { VehicleType } from '../../models/vehicle-type';
+import { ApiResponse } from '../../../services/auth.service';
 
 @Injectable({
   providedIn: 'root'

@@ -30,15 +30,17 @@ requests: any[] = [];
 
   ngOnInit(): void {
     this.loadDashboard();
-    this.loadRequests();
+   this.loadRequests({
+      search: '',
+      statusId: null,
+      fromDate: null,
+      toDate: null
+    });
+     
   }
 
   loadDashboard() {
-    /*
-    this.requestsService.getDashboard().subscribe(res => {
-      this.dashboard = res.data;
-    });
-    */
+   
      this.requestsService.getDashboard()
     .subscribe({
       next: (res) => {
@@ -53,25 +55,7 @@ requests: any[] = [];
     });
   }
 
- /*
-   loadRequests(filter?: any): void {
 
-  this.requestsService.getMyRequests()
-    .subscribe({
-      next: (res) => {
-
-        console.log('My Requests API Response:', res);
-
-        this.requests = res;
-
-      },
-      error: (err) => {
-        console.error('My Requests Error:', err);
-      }
-    });
-
-}
-    */
    loadRequests(filter?: any): void {
 
   console.log('Filter received:', filter);

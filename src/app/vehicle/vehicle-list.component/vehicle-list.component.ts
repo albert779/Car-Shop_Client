@@ -5,8 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { SearchComponent } from '../search/search';
 import { CarDetailsDialogComponent } from '../../dialogs/car-details-dialog.component/car-details-dialog.component';
 import { RequestInfoComponent } from '../request-info/request-info';
-import { AuthService } from '../../auth/auth';
-import { LocalStorageService } from '../../../services/local-storage';
 import { VehicleService } from './vehicle.service';
 import { MyCarInfo } from '../../models/myCar';
 import { MyCarCreateDto } from '../../models/myCarCreateDto';
@@ -16,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Item } from '../item/item';
 import { AddItemButtonComponent } from '../add-item-button/add-item-button';
 import { NotificationService } from '../../shared/services/notification';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -32,12 +31,12 @@ import { NotificationService } from '../../shared/services/notification';
   ]
 })
 export class VehicleListComponent implements OnInit {
-private notification = inject(NotificationService);
+  private notification = inject(NotificationService);
   public VehicleType = VehicleType;
 
   // 🚗 1 = Car
   // 🚛 2 = Truck
- // @Input({ required: true })
+  // @Input({ required: true })
   //vehicleTypeId!: VehicleType;
 
   //vehicleTypeId: VehicleType = VehicleType.Car;
@@ -54,31 +53,30 @@ private notification = inject(NotificationService);
   constructor(
     private dialog: MatDialog,
     private authService: AuthService,
-    private storage: LocalStorageService,
     private vehicleService: VehicleService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    
- this.vehicleTypeId = this.route.snapshot.data['vehicleTypeId'];
 
-  console.log('🚗 Vehicle Type:', this.vehicleTypeId);
+    this.vehicleTypeId = this.route.snapshot.data['vehicleTypeId'];
 
-  if (!this.vehicleTypeId) {
-    console.error('❌ vehicleTypeId is missing from route data');
-    return;
-  }
+    console.log('🚗 Vehicle Type:', this.vehicleTypeId);
 
-//this.vehicleTypeId = type;
+    if (!this.vehicleTypeId) {
+      console.error('❌ vehicleTypeId is missing from route data');
+      return;
+    }
 
-  if (this.vehicleTypeId=== VehicleType.Car) {
-    this.title = 'Cars';
-  } else if (this.vehicleTypeId === VehicleType.Truck) {
-    this.title = 'Trucks';
-  }
+    //this.vehicleTypeId = type;
 
-  this.loadVehicles();
+    if (this.vehicleTypeId === VehicleType.Car) {
+      this.title = 'Cars';
+    } else if (this.vehicleTypeId === VehicleType.Truck) {
+      this.title = 'Trucks';
+    }
+
+    this.loadVehicles();
   }
 
   trackById(index: number, vehicle: MyCarInfo): number {
@@ -101,8 +99,8 @@ private notification = inject(NotificationService);
         //this.filteredVehicles.set(response.data);
         const vehicles = response.data.$values || response.data || [];
 
-         this.vehicles.set(vehicles);
-         this.filteredVehicles.set(vehicles);
+        this.vehicles.set(vehicles);
+        this.filteredVehicles.set(vehicles);
 
       },
 
@@ -114,12 +112,12 @@ private notification = inject(NotificationService);
     });
   }
 
-onSearchResult(results: MyCarInfo[]): void {
+  onSearchResult(results: MyCarInfo[]): void {
 
-  console.log('🔍 Search results:', results);
+    console.log('🔍 Search results:', results);
 
-  this.filteredVehicles.set(results);
-}
+    this.filteredVehicles.set(results);
+  }
 
 
   // =========================
@@ -169,16 +167,16 @@ onSearchResult(results: MyCarInfo[]): void {
     this.vehicleService.updateVehicle(vehicle.id, vehicle).subscribe({
 
       next: (updated: MyCarInfo) => {
-      /*
-        const updatedList = this.vehicles().map(v =>
-          v.id === updated.id ? updated : v
-        );
-
-        this.vehicles.set(updatedList);
-        this.filteredVehicles.set(updatedList);
-      */
+        /*
+          const updatedList = this.vehicles().map(v =>
+            v.id === updated.id ? updated : v
+          );
+  
+          this.vehicles.set(updatedList);
+          this.filteredVehicles.set(updatedList);
+        */
         console.log('✅ Vehicle updated:', updated);
-         this.loadVehicles();
+        this.loadVehicles();
       },
 
       error: (err: any) => {
@@ -249,46 +247,18 @@ onSearchResult(results: MyCarInfo[]): void {
 
     let user = this.authService.getUser();
 
-    if (!user) {
-
-      const stored =
-        this.storage.getValueFromStore('user');
-
-      if (!stored) {
-
-        //alert('User info missing.');
-        this.notification.error('User info missing.');
-
-        return;
-      }
-
-      try {
-
-        user =
-          typeof stored === 'string'
-            ? JSON.parse(stored)
-            : stored;
-
-      } catch (error) {
-
-        console.error(error);
-
-        //alert('Invalid user data.');
-        this.notification.error('Invalid user data.');
-
-        return;
-      }
+    if (user == null) {
+      return;
     }
 
     this.dialog.open(RequestInfoComponent, {
-
       width: '400px',
-
       data: {
         user,
         vehicle
       }
 
     });
+
   }
 }

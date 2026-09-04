@@ -7,16 +7,13 @@ import {
   ReactiveFormsModule,
   FormGroup
 } from '@angular/forms';
-import { AuthService } from '../auth';
-import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { LocalStorageService } from '../../../services/local-storage';
-import { jwtDecode } from 'jwt-decode';
 import { NotificationService } from '../../shared/services/notification';
+import { AuthService } from '../../../services/auth.service';
 
 interface LoginResponse {
   firstName: string;
@@ -53,8 +50,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router,
-    private storage: LocalStorageService
+
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -72,67 +68,16 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) return;
 
     this.auth.login(this.loginForm.value).subscribe({
-      next: (response: any) => {
+      next: (isSuccess: boolean) => {
+        debugger;
+        console.log('LOGIN RESPONSE:', isSuccess);
 
-        console.log('LOGIN RESPONSE:', response);
 
-        const data = response?.data;
-
-        if (!data?.token) {
+        if (isSuccess == false) {
           //alert('Login failed');
           this.notification.error('Login failed');
           return;
         }
-
-        const decoded: any = jwtDecode(data.token);
-        const userId = decoded?.id;
-
-
-        if (!decoded?.roleId) {
-          this.notification.error('missing roleId in token');
-          return;
-        }
-
-        ///
-        const roleId: string = decoded.roleId;
-        const roleName = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-
-        this.storage.setValueInStore('roleId', roleId);
-        this.storage.setValueInStore('roleName', roleName);
-
-
-        // ✅ Save user (NOW includes id)
-        const user = {
-          id: Number(userId), // 🔥 FIX for your "undefined userId" issue
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          phone: data.phone,
-          roleId: roleId,
-          token: data.token
-        };
-
-        this.auth.setUser(user);
-
-        //this.router.navigateByUrl('/cars');
-        this.notification.success('Login successful!');
-        // this.router.navigateByUrl('/cars');
-        if (roleId === '1') {
-
-          this.router.navigateByUrl('/dashboard');
-
-        }
-        else {
-
-          this.router.navigateByUrl('/cars');
-
-        }
-
-      },
-
-      error: (err) => {
-        console.error(err);
-        this.auth.logout();
       }
     });
   }

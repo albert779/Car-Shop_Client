@@ -9,6 +9,7 @@ import { RegisterComponent } from './auth/register/register';
 import { authGuard } from '../guards/auth-guard';
 import { VehicleType } from './models/vehicle-type';
 import { MyRequestsComponent } from '../my-requests/my-requests';
+import { NotFoundComponent } from '../app/not-found/not-found';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -35,7 +36,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     canActivate: [authGuard],
-    data: { role: 'ADMIN' },
+    data: { role: 'Manager' },
     loadComponent: () => import('./admin/admin').then(m => m.AdminComponent)
   },
 
@@ -54,53 +55,72 @@ export const routes: Routes = [
 
   },
 
-  // Default route
-  { path: '', redirectTo: 'cars', pathMatch: 'full' },
+
 
   {
+
+
     path: 'dashboard',
-    component: LoginComponent,
-    canActivate: [authGuard],
-    data: {
+  loadComponent: () =>
+    import('../app/not-found/not-found')
+      .then(m => m.NotFoundComponent),
+  canActivate: [authGuard],
+   data: {
       role: 'Manager'
+      
     }
   },
 
   {
-    path: 'vehicles',
-    component: LoginComponent,
-    canActivate: [authGuard],
-    data: {
+     path: 'vehicles',
+  loadComponent: () =>
+    import('../app/not-found/not-found')
+      .then(m => m.NotFoundComponent),
+  canActivate: [authGuard],
+   data: {
       role: 'Manager'
+      
     }
   },
 
   {
-    path: 'messages',
-    component: LoginComponent,
-    canActivate: [authGuard],
-    data: {
+     path: 'messages',
+  loadComponent: () =>
+    import('../app/not-found/not-found')
+      .then(m => m.NotFoundComponent),
+  canActivate: [authGuard],
+   data: {
       role: 'Manager'
+      
     }
   },
 
   {
-    path: 'profile',
-    component: LoginComponent,
-    canActivate: [authGuard],
-    data: {
+     path: 'profile',
+  loadComponent: () =>
+    import('../app/not-found/not-found')
+      .then(m => m.NotFoundComponent),
+  canActivate: [authGuard],
+   data: {
       role: 'Manager'
+      
     }
   },
 
   {
-    path: 'settings',
-    component: LoginComponent,
-    canActivate: [authGuard],
-    data: {
+     path: 'settings',
+  loadComponent: () =>
+    import('../app/not-found/not-found')
+      .then(m => m.NotFoundComponent),
+  canActivate: [authGuard],
+   data: {
       role: 'Manager'
+      
     }
   },
+  
+// Default route
+  { path: '', redirectTo: 'cars', pathMatch: 'full' },
 
   // 404 – MUST BE LAST
   {

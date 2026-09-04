@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { ApiResponse, AuthService } from '../auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,6 +12,7 @@ import { EMPTY } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { NotificationService } from '../../shared/services/notification';
+import { ApiResponse, AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -63,24 +63,6 @@ export class RegisterComponent {
     });
 
 
-
-
-    // ✅ react to result with effect
-    /*
-   effect(() => {
-  const response = this.registerResult();
-  console.log('Register response:', response);
-  if (!response) return;
-
-  if (response.success) {
-    // Navigate to login after successful registration
-    this.notification.success('Registration successful! Please log in.');
-    this.router.navigate(['/login']);
-  } else {
-    this.notification.error(response.message);
-  }
-});
-*/
     effect(() => {
       const response = this.registerResult();
 

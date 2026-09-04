@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+
+
+
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { LoadingService } from '../services/loading.service';
-//import { AuthService } from './auth/auth';
 import { SidebarComponent } from '../sidebar/sidebar';
-//import { MyRequestsComponent } from '../my-requests/my-requests';
 import { AuthService } from '../services/auth.service';
+
 
 
 @Component({
@@ -17,28 +20,33 @@ import { AuthService } from '../services/auth.service';
     RouterLink,
     RouterOutlet,
     MatProgressSpinnerModule,
-    SidebarComponent,
-    //MyRequestsComponent
+    SidebarComponent
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.css']   // ✅ fixed typo
+  styleUrls: ['./app.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
   title = 'App Component';
+  isManager: boolean = false;
 
   constructor(
     public loadingService: LoadingService,
     public auth: AuthService,
     public router: Router
-  ) {
-  }
-get isAdmin(): boolean {
-    return this.auth.getRoleId() === 1;
+  ) { }
+
+  ngOnInit(): void {
+    const roleId = this.auth.getRoleId();
+    this.setIsManagerRole(roleId);
   }
 
+  private setIsManagerRole(roleId: number): void {
+    this.isManager = roleId === 1;
+  }
 
-logout() {
-  this.auth.logout();
-  this.router.navigate(['/login']);
-}
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
 }
