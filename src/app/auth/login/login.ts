@@ -11,9 +11,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NotificationService } from '../../shared/services/notification';
 import { AuthService } from '../../../services/auth.service';
+import { LocalStorageService } from '../../../services/local-storage';
 
 interface LoginResponse {
   firstName: string;
@@ -43,9 +44,15 @@ interface LoginResponse {
 })
 export class LoginComponent implements OnInit {
 
-  private notification = inject(NotificationService);
+  private readonly REDIRECT_URL_KEY = 'redirectUrl';
   submitted = false;
   loginForm: FormGroup;
+
+
+  private readonly notification = inject(NotificationService);
+  private readonly storage = inject(LocalStorageService);
+  private readonly router = inject(Router);
+
 
   constructor(
     private fb: FormBuilder,
@@ -78,7 +85,20 @@ export class LoginComponent implements OnInit {
           this.notification.error('Login failed');
           return;
         }
+
+        /// todo: redicrect 
+        const goToDefault = '/cars';
+        const gotoBeforeLogin = this.storage.getValueFromStore(this.REDIRECT_URL_KEY);
+
+        if (gotoBeforeLogin == null || gotoBeforeLogin == undefined) {
+          this.router.navigate([goToDefault]);
+          return;
+        }
+
+        this.router.navigate([gotoBeforeLogin]);
+
       }
+
     });
   }
 }
