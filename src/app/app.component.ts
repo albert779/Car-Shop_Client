@@ -28,7 +28,6 @@ import { AuthService } from '../services/auth.service';
 export class AppComponent implements OnInit {
 
   title = 'App Component';
-  isManager: boolean = false;
 
   constructor(
     public loadingService: LoadingService,
@@ -37,16 +36,21 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const roleId = this.auth.getRoleId();
-    this.setIsManagerRole(roleId);
+    
+    
   }
 
-  private setIsManagerRole(roleId: number): void {
-    this.isManager = roleId === 1;
-  }
+
 
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
+
+  public isManager(): boolean {
+    const roleId = this.auth.getRoleId();
+    return roleId === 1
+  }
+
+
 }
