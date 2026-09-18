@@ -76,7 +76,6 @@ export class LoginComponent implements OnInit {
 
     this.auth.login(this.loginForm.value).subscribe({
       next: (isSuccess: boolean) => {
-        debugger;
         console.log('LOGIN RESPONSE:', isSuccess);
 
 

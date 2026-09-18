@@ -29,14 +29,19 @@ requests: any[] = [];
   constructor(private requestsService: RequestsService) {}
 
   ngOnInit(): void {
+     this.refreshData();
+     
+  }
+
+  refreshData(): void {
     this.loadDashboard();
-   this.loadRequests({
+
+    this.loadRequests({
       search: '',
       statusId: null,
       fromDate: null,
       toDate: null
     });
-     
   }
 
   loadDashboard() {
@@ -75,4 +80,11 @@ requests: any[] = [];
     });
 
 }
+
+ onRequestUpdated(): void {
+    console.log('Request updated - refreshing data');
+
+    this.refreshData();
+  }
 }
+

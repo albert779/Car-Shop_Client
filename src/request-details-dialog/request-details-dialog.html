@@ -1,0 +1,202 @@
+<h2 mat-dialog-title class="dialog-title">
+
+  Request Details
+
+  <button
+    mat-icon-button
+    class="close-button"
+    (click)="close()">
+
+    <mat-icon>close</mat-icon>
+
+  </button>
+
+</h2>
+
+
+<mat-dialog-content>
+
+  <!-- ========================== -->
+  <!-- VEHICLE -->
+  <!-- ========================== -->
+
+  <div class="vehicle-section">
+
+    <img
+       class="vehicle-image"
+    [src]="request.image"
+    alt="Vehicle Image">
+
+    <div class="vehicle-info">
+
+      <h2>
+         {{ request.vehicle }}
+      </h2>
+
+      <p>
+        <strong>Request ID:</strong>
+        #{{ request.id }}
+      </p>
+
+      <p>
+        <strong>Date:</strong>
+         {{ request.requestedOn | date:'yyyy-MM-dd' }}
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================== -->
+  <!-- REQUEST MESSAGE -->
+  <!-- ========================== -->
+
+  <div class="section">
+
+    <h3>
+      <mat-icon>message</mat-icon>
+      Message From Request
+    </h3>
+
+    <div class="request-message">
+
+      {{ request.message || 'No message from the user' }}
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================== -->
+  <!-- CURRENT STATUS -->
+  <!-- ========================== -->
+
+  <div class="section">
+
+    <h3>
+      Current Status
+    </h3>
+
+    <div
+      class="current-status"
+      [ngClass]="{
+        'pending-status': selectedStatusId === 1,
+        'approved-status': selectedStatusId === 2,
+        'rejected-status': selectedStatusId === 3
+      }">
+
+      {{ getStatusName() }}
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================== -->
+  <!-- CHANGE STATUS -->
+  <!-- ========================== -->
+
+  <div class="section">
+
+    <h3>
+      Change Status
+    </h3>
+
+    <div class="status-buttons">
+
+      <button
+        mat-raised-button
+        [class.selected]="selectedStatusId === 1"
+        (click)="changeStatus(1)">
+
+        <mat-icon>schedule</mat-icon>
+        Pending
+
+      </button>
+
+
+      <button
+        mat-raised-button
+        [class.selected]="selectedStatusId === 2"
+        (click)="changeStatus(2)">
+
+        <mat-icon>check_circle</mat-icon>
+        Approve
+
+      </button>
+
+
+      <button
+        mat-raised-button
+        [class.selected]="selectedStatusId === 3"
+        (click)="changeStatus(3)">
+
+        <mat-icon>cancel</mat-icon>
+        Reject
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================== -->
+  <!-- MANAGER MESSAGE -->
+  <!-- ========================== -->
+
+  <div class="section">
+
+    <h3>
+      Add Message
+    </h3>
+
+    <mat-form-field
+      appearance="outline"
+      class="full-width">
+
+      <mat-label>
+        Message to user
+      </mat-label>
+
+      <textarea
+        matInput
+        rows="5"
+        [(ngModel)]="managerMessage"
+        placeholder="Write your message here...">
+      </textarea>
+
+    </mat-form-field>
+
+  </div>
+
+</mat-dialog-content>
+
+
+<!-- ========================== -->
+<!-- ACTIONS -->
+<!-- ========================== -->
+
+<mat-dialog-actions align="end">
+
+  <button
+    mat-button
+    (click)="close()">
+
+    Cancel
+
+  </button>
+
+
+  <button
+    mat-raised-button
+    class="save-button"
+    (click)="save()">
+
+    <mat-icon>save</mat-icon>
+    Save Changes
+
+  </button>
+
+</mat-dialog-actions>

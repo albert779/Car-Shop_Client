@@ -7,6 +7,7 @@ import { DashboardResponse } from '../app/models/dashboard-response';
   providedIn: 'root'
 })
 export class RequestsService {
+  apiUrl: any;
 
   
  //TableOfRequests: any;
@@ -78,7 +79,31 @@ export class RequestsService {
 }
   
 
+updateRequest(
+  requestId: number,
+  data: {
+    statusId: number;
+    message: string;
+  }
+): Observable<any> {
 
+  return this.http.put(
+    `TableOfRequests/${requestId}`,
+    data
+  );
+}
+
+sendMessage(data: {
+  requestId: number;
+  senderId: number;
+  receiverId: number;
+  messageText: string;
+}) {
+  return this.http.post(
+     'TableOfRequests/message',
+    data
+  );
+}
     
   }
 

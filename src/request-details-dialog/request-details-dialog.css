@@ -1,0 +1,91 @@
+.dialog-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.close-button {
+  margin-left: auto;
+}
+
+.vehicle-section {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.vehicle-image {
+  width: 230px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #f5f5f5;
+}
+
+.vehicle-info h2 {
+  margin: 0 0 15px;
+}
+
+.vehicle-info p {
+  margin: 7px 0;
+}
+
+.section {
+  margin-top: 25px;
+}
+
+.section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.request-message {
+  padding: 15px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  min-height: 50px;
+  white-space: pre-wrap;
+}
+
+.current-status {
+  display: inline-block;
+  padding: 10px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.pending-status {
+  background: #fff3cd;
+}
+
+.approved-status {
+  background: #d1e7dd;
+}
+
+.rejected-status {
+  background: #f8d7da;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-buttons button.selected {
+  transform: scale(1.05);
+  font-weight: bold;
+  border: 2px solid currentColor;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.save-button {
+  min-width: 160px;
+}

@@ -36,7 +36,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     router.navigate(['/login']);
     return false;
   }
-  debugger;
   if (user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] !== requiredRoleName) {
     router.navigate(['/unauthorized']);
     return false;
