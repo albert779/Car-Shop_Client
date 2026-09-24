@@ -36,7 +36,7 @@ interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private readonly API_LOGIN = 'auth/login';
+  private readonly API_LOGIN = 'auth';
   private readonly TOKEN_KEY = 'token';
   //   private readonly API = 'auth';
 
@@ -46,7 +46,7 @@ export class AuthService {
   // ===== LOGIN =====
   login(credentials: { email: string; password: string }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<LoginResponse>>(this.API_LOGIN, credentials)
+      .post<ApiResponse<LoginResponse>>(`${this.API_LOGIN}/login`, credentials)
       .pipe(
         map((res: ApiResponse<LoginResponse>) => {
 
