@@ -1,5 +1,3 @@
-
-
 import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -25,8 +23,6 @@ interface LoginResponse {
   roleId: number;
 }
 
-
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -37,7 +33,6 @@ interface LoginResponse {
     MatInputModule,
     MatButtonModule,
     RouterModule
-
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
@@ -45,19 +40,17 @@ interface LoginResponse {
 export class LoginComponent implements OnInit {
 
   private readonly REDIRECT_URL_KEY = 'redirectUrl';
+
   submitted = false;
   loginForm: FormGroup;
-
 
   private readonly notification = inject(NotificationService);
   private readonly storage = inject(LocalStorageService);
   private readonly router = inject(Router);
 
-
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
-
+    private auth: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -65,39 +58,51 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
-
-
+  ngOnInit(): void {}
 
   submit(): void {
     this.submitted = true;
 
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    console.log('LOGIN REQUEST:', this.loginForm.value);
 
     this.auth.login(this.loginForm.value).subscribe({
+
       next: (isSuccess: boolean) => {
         console.log('LOGIN RESPONSE:', isSuccess);
 
-
-        if (isSuccess == false) {
-          //alert('Login failed');
+        if (!isSuccess) {
           this.notification.error('Login failed');
           return;
         }
 
-        /// todo: redicrect 
         const goToDefault = '/cars';
-        const gotoBeforeLogin = this.storage.getValueFromStore(this.REDIRECT_URL_KEY);
 
-        if (gotoBeforeLogin == null || gotoBeforeLogin == undefined) {
+        const gotoBeforeLogin =
+          this.storage.getValueFromStore(this.REDIRECT_URL_KEY);
+
+        if (gotoBeforeLogin == null || gotoBeforeLogin === undefined) {
           this.router.navigate([goToDefault]);
           return;
         }
 
         this.router.navigate([gotoBeforeLogin]);
+      },
 
+      error: (error) => {
+        console.log('LOGIN ERROR STATUS:', error.status);
+        console.log('LOGIN ERROR BODY:', error.error);
+        console.log('LOGIN ERROR MESSAGE:', error.message);
+
+        this.notification.error(
+          error.error?.message || 'Login failed'
+        );
       }
 
     });
   }
 }
+

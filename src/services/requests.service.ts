@@ -95,8 +95,8 @@ updateRequest(
 
 sendMessage(data: {
   requestId: number;
-  senderId: number;
-  receiverId: number;
+  //senderId: number;
+ // receiverId: number;
   messageText: string;
 }) {
   return this.http.post(

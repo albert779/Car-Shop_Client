@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+//import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -8,7 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RequestDetailsDialogComponent } from '../request-details-dialog/request-details-dialog';
 import { RequestsService } from '../services/requests.service';
-
+import { Component, Input,EventEmitter, Output } from '@angular/core';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class TableOfRequestsComponent {
 
 
   @Input() requests:any[] = [];
-
+  @Output() requestUpdated = new EventEmitter<void>();
 
   displayedColumns = [
     'id',
@@ -67,25 +67,32 @@ constructor(
       }
     );
 
-    dialogRef.afterClosed().subscribe(result => {
 
-      if (result) {
-        console.log('Updated request:', result);
+dialogRef.afterClosed().subscribe(result => {
 
-        // Reload your requests here if needed
-        this.requestsService.updateRequest(
+  if (result) {
+
+    console.log('Updated request:', result);
+
+    debugger;
+    this.requestsService.updateRequest(
+      
       result.requestId,
       {
         statusId: result.statusId,
-        message: result.message
+        message: result.message ?? ''
       }
     ).subscribe({
 
       next: () => {
+
         console.log('Status updated successfully');
 
-        // Reload the table
+        // Reload table
         this.loadRequests();
+
+        // Tell MyRequestsComponent to reload dashboard
+        this.requestUpdated.emit();
       },
 
       error: (error) => {
@@ -93,18 +100,29 @@ constructor(
       }
 
     });
-      }
-    });
+  }
+});
   }
 
-  loadRequests(): void {
+
+loadRequests(): void {
+
   this.requestsService.getMyRequests().subscribe({
-    next: (data) => {
-      this.requests = data;
+
+    next: (res) => {
+
+      console.log('Requests response:', res);
+
+      this.requests = res.data ?? res;
+
     },
+
     error: (error) => {
+
       console.error('Failed to load requests:', error);
+
     }
+
   });
 }
   

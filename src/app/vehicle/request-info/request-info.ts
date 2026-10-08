@@ -1,6 +1,16 @@
+
+
 import { Component, inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogModule
+} from '@angular/material/dialog';
+import {
+  FormBuilder,
+  Validators,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RequestInfoService } from '../../../services/request-info.service';
 import { NotificationService } from '../../shared/services/notification';
@@ -15,9 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     CommonModule,
     ReactiveFormsModule,
     MatDialogModule,
-    //NotificationService,
     MatSnackBarModule
-
   ]
 })
 export class RequestInfoComponent implements OnInit {
@@ -27,7 +35,6 @@ export class RequestInfoComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<RequestInfoComponent>);
   private data: any = inject(MAT_DIALOG_DATA);
   private requestService = inject(RequestInfoService);
- 
 
   form = this.fb.group({
     firstName: [''],
@@ -40,117 +47,167 @@ export class RequestInfoComponent implements OnInit {
     message: ['', Validators.required]
   });
 
-  ngOnInit() {
-    console.log('Dialog received data:', this.data);  // 🔎 important
-     console.log('USER:', this.data?.user);
-   // if (!this.data || !this.data.vehicle) return;
+  ngOnInit(): void {
 
-    let user = this.data.user ?? {};       // user info
-    const v = this.data.vehicle;
+    console.log('Dialog received data:', this.data);
+    console.log('USER:', this.data?.user);
+
+    let user = this.data?.user ?? {};
+    const vehicle = this.data?.vehicle;
 
     if (typeof user === 'string') {
-    try {
-      user = JSON.parse(user);
-    } catch (e) {
-      console.error('Failed to parse user:', e);
-      user = {};
+      try {
+        user = JSON.parse(user);
+      } catch (error) {
+        console.error('Failed to parse user:', error);
+        user = {};
+      }
     }
-  }
 
-  console.log('PARSED USER:', user);
+    console.log('PARSED USER:', user);
+
+    // Get email from JWT
+    const email =
+      user?.email ||
+      user?.[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
+      ] ||
+      '';
+
+    console.log('USER EMAIL:', email);
 
     this.form.patchValue({
       firstName: user?.firstName || '',
       lastName: user?.lastName || '',
-      email: user?.email || '',
+      email: email,
       phone: user?.phone || '',
-      model: v?.model || '',
-      color: v?.color || '',
-      price: v?.price || ''
+      model: vehicle?.model || '',
+      color: vehicle?.color || '',
+      price: vehicle?.price || ''
     });
   }
 
-
-
-  close() {
+  close(): void {
     this.dialogRef.close();
   }
 
-  
+  send(): void {
 
-send(): void {
-  console.log("SEND CLICKED");
+    console.log('SEND CLICKED');
 
-  console.log("DATA CHECK:", {
-    user: this.data?.user,
-    vehicle: this.data?.vehicle,
-    carId: this.data?.vehicle?.id,
-    userId: this.data?.user?.id,
-    form: this.form?.value
-  });
+    console.log('DATA CHECK:', {
+      user: this.data?.user,
+      vehicle: this.data?.vehicle,
+      carId: this.data?.vehicle?.id,
+      userId: this.data?.user?.id,
+      form: this.form.value
+    });
 
-  if (!this.form || this.form.invalid) {
-    console.warn("Form is invalid");
-    return;
-  }
-
-  // ✅ safe user parsing
-  let user = this.data?.user;
-
-  if (typeof user === 'string') {
-    try {
-      user = JSON.parse(user);
-    } catch (e) {
-      console.error('Invalid user data', e);
-      //alert('User data error. Please login again.');
-      this.notification.error('User data error. Please login again.');
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      console.warn('Form is invalid');
       return;
     }
-  }
 
-  // 🔥 normalize ids (IMPORTANT FIX)
-  const carId = Number(this.data?.vehicle?.id);
-  const userId = Number(user?.id);
-  const message = this.form?.get('message')?.value?.trim();
+    // Get user
+    let user = this.data?.user ?? {};
 
-  // ⚠️ strict validation
-  if (!carId || !userId || !message?.length) {
-    console.error("Missing required fields", { carId, userId, message });
-    //this.notification.error("Missing required data");
-    return;
-  }
+    if (typeof user === 'string') {
+      try {
+        user = JSON.parse(user);
+      } catch (error) {
+        console.error('Invalid user data:', error);
 
-  // ✅ payload
-  const payload = {
-   carId,
-      userId,
-      firstName: this.form.value.firstName,
-      lastName: this.form.value.lastName,
-      phone: this.form.value.phone,
-      email: this.form.value.email,
-      model: this.form.value.model,
-      color: this.form.value.color,
-      price: this.form.value.price,
-      message: this.form.value.message // 🔥 correct field
-  };
+        this.notification.error(
+          'User data error. Please login again.'
+        );
 
-  console.log('SENDING REQUEST:', payload);
-
-  this.requestService.sendRequest(payload).subscribe({
-    next: (res) => {
-      console.log("SUCCESS:", res);
-      this.notification.success('Request sent successfully');
-      this.dialogRef?.close(true);
-    },
-    error: (err) => {
-      console.error('Request failed:', err);
-      this.notification.error('Failed to send request');
+        return;
+      }
     }
-  });
 
-  
+    console.log('PARSED USER FOR SEND:', user);
 
-}
+    // IDs
+    const carId = Number(this.data?.vehicle?.id);
+    const userId = Number(user?.id);
 
+    // Get email from JWT
+    const email =
+      user?.email ||
+      user?.[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
+      ] ||
+      this.form.value.email ||
+      '';
 
+    // Get message
+    const message =
+      this.form.get('message')?.value?.trim() || '';
+
+    // Validate
+    if (!carId || !userId || !message.length) {
+
+      console.error('Missing required fields:', {
+        carId,
+        userId,
+        email,
+        message
+      });
+
+      this.notification.error(
+        'Missing required data'
+      );
+
+      return;
+    }
+
+    // Create payload
+    const payload = {
+      carId: carId,
+      userId: userId,
+
+      firstName: this.form.value.firstName || '',
+      lastName: this.form.value.lastName || '',
+
+      phone: this.form.value.phone || '',
+      email: email,
+
+      model: this.form.value.model || '',
+      color: this.form.value.color || '',
+      price: this.form.value.price || '',
+
+      message: message
+    };
+
+    console.log('SENDING REQUEST:', payload);
+
+    this.requestService.sendRequest(payload).subscribe({
+
+      next: (res) => {
+
+        console.log('SUCCESS:', res);
+
+        this.notification.success(
+          'Request sent successfully'
+        );
+
+        this.dialogRef.close(true);
+      },
+
+      error: (err) => {
+
+        console.error('REQUEST FAILED:', err);
+        console.error('STATUS:', err?.status);
+        console.error('ERROR BODY:', err?.error);
+
+        this.notification.error(
+          err?.error?.message ||
+          err?.error?.data ||
+          'Failed to send request'
+        );
+      }
+
+    });
+  }
 }

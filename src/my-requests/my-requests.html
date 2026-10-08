@@ -31,10 +31,10 @@
   <app-filter
     (filterChanged)="loadRequests($event)">
   </app-filter>
-
-  <app-table-of-requests
-    [requests]="requests">
-    (requestUpdated)="onRequestUpdated()">
-  </app-table-of-requests>
+  
+<app-table-of-requests
+  [requests]="requests"
+  (requestUpdated)="onRequestUpdated()">
+</app-table-of-requests>
 
 </div>
