@@ -1,0 +1,120 @@
+<!-- 
+<div class="support-history">
+  <h3>Message History</h3>
+
+  <p *ngIf="loading">Loading messages...</p>
+
+  <p *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </p>
+
+  <div class="message-list" *ngIf="!loading">
+    <p *ngIf="messages.length === 0">
+      No messages yet. Start the conversation below.
+    </p>
+
+    <div
+      *ngFor="let message of messages"
+      class="message-row"
+      [class.my-message]="message.senderId === currentUserId"
+      [class.other-message]="message.senderId !== currentUserId">
+
+      <div class="message-bubble">
+        <div class="sender">
+          {{ message.senderId === currentUserId ? 'You' : 'Other participant' }}
+        </div>
+
+        <p>{{ message.messageText }}</p>
+
+        <small>
+          {{ message.createdAt | date:'medium' }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <form (ngSubmit)="sendMessage()">
+    <label for="messageText">Add Message</label>
+
+    <textarea
+      id="messageText"
+      name="messageText"
+      [(ngModel)]="messageText"
+      placeholder="Message to user"
+      rows="5"
+      maxlength="2000"
+      required>
+    </textarea>
+
+    <p *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </p>
+
+    <button
+      type="submit"
+      [disabled]="!messageText.trim() || sending">
+      {{ sending ? 'Sending...' : 'Send Message' }}
+    </button>
+  </form>
+</div>
+-->
+
+
+<div class="support-history">
+  <h3>Message History</h3>
+
+  <p *ngIf="loading">Loading messages...</p>
+
+  <p *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </p>
+
+  <div class="message-list" *ngIf="!loading && !errorMessage">
+    <p *ngIf="messages.length === 0">
+      No messages yet. Start the conversation below.
+    </p>
+
+    <div
+      *ngFor="let message of messages"
+      class="message-row"
+      [class.my-message]="getSenderId(message) === currentUserId"
+      [class.other-message]="getSenderId(message) !== currentUserId">
+
+      <div class="message-bubble">
+        <div class="sender">
+          {{ getSenderId(message) === currentUserId
+              ? 'You'
+              : 'Other participant' }}
+        </div>
+
+        <p>{{ getMessageText(message) }}</p>
+
+        <small>
+          {{ getCreatedAt(message) | date:'medium' }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <form (ngSubmit)="sendMessage()">
+    <label for="messageText">Add Message</label>
+
+    <textarea
+      id="messageText"
+      name="messageText"
+      [(ngModel)]="messageText"
+      placeholder="Write a message..."
+      rows="5"
+      maxlength="2000"
+      required>
+    </textarea>
+
+    <!--
+    <button
+      type="submit"
+      [disabled]="!messageText.trim() || sending">
+      {{ sending ? 'Sending...' : 'Send Message' }}
+    </button>
+  -->
+  </form>
+</div>

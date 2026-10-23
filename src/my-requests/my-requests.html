@@ -1,5 +1,6 @@
 
 
+<!--
 <div class="my-requests-container">
 
   <h2>My Requests</h2>
@@ -36,5 +37,96 @@
   [requests]="requests"
   (requestUpdated)="onRequestUpdated()">
 </app-table-of-requests>
+
+</div>
+-->
+
+<div class="my-requests-container">
+
+  <h2>My Requests</h2>
+
+  <div class="cards">
+
+    <div class="card total">
+      <div class="number">{{ dashboard.totalRequests }}</div>
+      <div>Total Requests</div>
+    </div>
+
+    <div class="card pending">
+      <div class="number">{{ dashboard.pendingRequests }}</div>
+      <div>Pending</div>
+    </div>
+
+    <div class="card approved">
+      <div class="number">{{ dashboard.approvedRequests }}</div>
+      <div>Approved</div>
+    </div>
+
+    <div class="card rejected">
+      <div class="number">{{ dashboard.rejectedRequests }}</div>
+      <div>Rejected</div>
+    </div>
+
+  </div>
+
+  <app-filter
+    (filterChanged)="onFilterChanged($event)">
+  </app-filter>
+
+  <app-table-of-requests
+    [requests]="requests"
+    (requestUpdated)="onRequestUpdated()">
+  </app-table-of-requests>
+
+  <div class="pagination" *ngIf="totalCount > 0">
+
+    <span>
+      Showing {{ requests.length }} of {{ totalCount }} requests
+    </span>
+
+    <div class="pagination-controls">
+
+      <button
+        type="button"
+        (click)="previousPage()"
+        [disabled]="currentPage <= 1 || loading">
+        Previous
+      </button>
+
+      <span>
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="currentPage >= totalPages || loading">
+        Next
+      </button>
+
+    </div>
+
+    <div class="page-size">
+      <label for="pageSize">Requests per page:</label>
+
+      <select
+        id="pageSize"
+        [value]="pageSize"
+        (change)="changePageSize($any($event.target).value)"
+        [disabled]="loading">
+
+        <option value="5">5</option>
+        <option value="10">10</option>
+
+      </select>
+    </div>
+
+  </div>
+
+  <p *ngIf="loading">Loading requests...</p>
+
+  <p *ngIf="!loading && totalCount === 0">
+    No requests found.
+  </p>
 
 </div>

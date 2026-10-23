@@ -23,6 +23,9 @@ export class ErrorMessageResolverService {
     return errorMessage;
 
   }
+
+
+  /*
   private getErrorMessageOrUndefined(error: HttpErrorResponse): string | undefined {
 
 
@@ -48,7 +51,69 @@ export class ErrorMessageResolverService {
 
   }
 
+*/
 
+
+private getErrorMessageOrUndefined(
+  error: HttpErrorResponse
+): string | undefined {
+
+  // Request could not reach the server.
+  if (error.status === 0) {
+    return this.getStandardAPIErorr(error);
+  }
+
+  const response: unknown = error.error;
+
+  // Handle null or undefined response bodies.
+  if (response == null) {
+    return this.getStandardAPIErorr(error);
+  }
+
+  // Handle plain-text responses.
+  if (typeof response === 'string') {
+    const message = response.trim();
+
+    if (!message || message.startsWith('<')) {
+      return this.getStandardAPIErorr(error);
+    }
+
+    return message;
+  }
+
+  // Handle JSON object responses.
+  if (typeof response === 'object') {
+    const apiResponse = response as {
+      success?: boolean;
+      message?: unknown;
+      data?: unknown;
+      error?: unknown;
+    };
+
+    if (
+      typeof apiResponse.message === 'string' &&
+      apiResponse.message.trim()
+    ) {
+      return apiResponse.message;
+    }
+
+    if (
+      typeof apiResponse.data === 'string' &&
+      apiResponse.data.trim()
+    ) {
+      return apiResponse.data;
+    }
+
+    if (
+      typeof apiResponse.error === 'string' &&
+      apiResponse.error.trim()
+    ) {
+      return apiResponse.error;
+    }
+  }
+
+  return this.getStandardAPIErorr(error);
+}
 
   private getStandardAPIErorr(error: HttpErrorResponse): string | undefined {
 

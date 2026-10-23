@@ -1,3 +1,4 @@
+/*
 //import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -74,7 +75,7 @@ dialogRef.afterClosed().subscribe(result => {
 
     console.log('Updated request:', result);
 
-    debugger;
+   
     this.requestsService.updateRequest(
       
       result.requestId,
@@ -126,4 +127,122 @@ loadRequests(): void {
   });
 }
   
+}
+*/
+
+
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
+import { RequestDetailsDialogComponent } from '../request-details-dialog/request-details-dialog';
+import { RequestsService } from '../services/requests.service';
+
+@Component({
+  selector: 'app-table-of-requests',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatChipsModule,
+    MatDialogModule
+  ],
+  templateUrl: './table-of-requests.html',
+  styleUrls: ['./table-of-requests.css']
+})
+export class TableOfRequestsComponent implements OnChanges {
+
+  @Input() requests: any[] = [];
+
+  @Output() requestUpdated = new EventEmitter<void>();
+
+  displayedColumns: string[] = [
+    'id',
+    'vehicle',
+    'message',
+    'status',
+    'requestedOn',
+    'lastUpdate',
+    'actions'
+  ];
+
+  constructor(
+    private dialog: MatDialog,
+    private requestsService: RequestsService
+  ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['requests']) {
+      // Keep the input safe for the table template.
+      if (!Array.isArray(this.requests)) {
+        console.error(
+          'TableOfRequestsComponent expected an array:',
+          this.requests
+        );
+
+        this.requests = [];
+      }
+    }
+  }
+
+  view(request: any): void {
+    console.log('Request:', request);
+  }
+
+  openView(request: any): void {
+    console.log('VIEW REQUEST:', request);
+    console.log('REQUEST BEFORE DIALOG:', request);
+    console.log('USER ID BEFORE DIALOG:', request.userId);
+
+    const dialogRef = this.dialog.open(
+      RequestDetailsDialogComponent,
+      {
+        width: '700px',
+        maxWidth: '95vw',
+        data: request
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      console.log('Updated request:', result);
+
+      this.requestsService.updateRequest(
+        result.requestId,
+        {
+          statusId: result.statusId,
+          message: result.message ?? ''
+        }
+      ).subscribe({
+        next: () => {
+          console.log('Status updated successfully');
+
+          // The parent reloads the dashboard and requests.
+          this.requestUpdated.emit();
+        },
+        error: (error) => {
+          console.error('Update failed:', error);
+        }
+      });
+    });
+  }
 }

@@ -1,4 +1,4 @@
-
+ /*
 import { Injectable } from '@angular/core';
 import { HttpClient , HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -107,3 +107,97 @@ sendMessage(data: {
     
   }
 
+*/
+
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { DashboardResponse } from '../app/models/dashboard-response';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RequestsService {
+
+  constructor(private http: HttpClient) {}
+
+  private formatDate(date: Date | string): string {
+    if (typeof date === 'string') {
+      return date;
+    }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  // Paginated requests for the logged-in user
+  getMyRequests(
+    page: number = 1,
+    pageSize: number = 5,
+    filter?: any
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('page', page)
+      .set('pageSize', pageSize);
+
+    if (filter?.search?.trim()) {
+      params = params.set('search', filter.search.trim());
+    }
+
+    if (filter?.statusId != null) {
+      params = params.set('statusId', filter.statusId.toString());
+    }
+
+    if (filter?.fromDate) {
+      params = params.set(
+        'fromDate',
+        this.formatDate(filter.fromDate)
+      );
+    }
+
+    if (filter?.toDate) {
+      params = params.set(
+        'toDate',
+        this.formatDate(filter.toDate)
+      );
+    }
+
+    console.log('My Requests parameters:', params.toString());
+
+    return this.http.get<any>(
+      'Dashboard/my-requests',
+      { params }
+    );
+  }
+
+  getDashboard(): Observable<DashboardResponse> {
+    return this.http.get<DashboardResponse>('dashboard');
+  }
+
+  updateRequest(
+    requestId: number,
+    data: {
+      statusId: number;
+      message: string;
+    }
+  ): Observable<any> {
+    return this.http.put(
+      `TableOfRequests/${requestId}`,
+      data
+    );
+  }
+
+  sendMessage(data: {
+    requestId: number;
+    messageText: string;
+  }): Observable<any> {
+    return this.http.post(
+      'TableOfRequests/message',
+      data
+    );
+  }
+}
