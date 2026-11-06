@@ -32,6 +32,7 @@ return this.http.get<any[]>(this.api);
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { APIResponseBase } from '../_shared/interfaces/api.response.base';
 
 export interface TableOfRequest {
   id: number;
@@ -53,12 +54,6 @@ export interface MyRequestsPage {
   totalPages: number;
 }
 
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message?: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -73,13 +68,13 @@ export class RequestsService {
   getMyRequests(
     page: number = 1,
     pageSize: number = 5
-  ): Observable<ApiResponse<MyRequestsPage>> {
+  ): Observable<APIResponseBase<MyRequestsPage>> {
 
     const params = new HttpParams()
       .set('page', page)
       .set('pageSize', pageSize);
 
-    return this.http.get<ApiResponse<MyRequestsPage>>(
+    return this.http.get<APIResponseBase<MyRequestsPage>>(
       `${this.api}/my-requests`,
       { params }
     );

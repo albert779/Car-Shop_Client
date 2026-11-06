@@ -4,16 +4,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { LocalStorageService } from './local-storage';
+import { APIResponseBase } from '../_shared/interfaces/api.response.base';
 
 
-
-// // ==============================
-// // API RESPONSE
-// // ==============================
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-}
 
 interface UserClaims {
   firstName: string;
@@ -25,7 +18,6 @@ interface UserClaims {
   iss: string;
   aud: string;
 }
-
 
 
 // API response contains only token
@@ -46,9 +38,9 @@ export class AuthService {
   // ===== LOGIN =====
   login(credentials: { email: string; password: string }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<LoginResponse>>(`${this.API_LOGIN}/login`, credentials)
+      .post<APIResponseBase<LoginResponse>>(`${this.API_LOGIN}/login`, credentials)
       .pipe(
-        map((res: ApiResponse<LoginResponse>) => {
+        map((res: APIResponseBase<LoginResponse>) => {
 
           if (!res || !res.data.token) {
             return false
@@ -70,9 +62,9 @@ export class AuthService {
     email: string;
     password: string;
     name: string;
-  }): Observable<ApiResponse<string>> {
+  }): Observable<APIResponseBase<string>> {
 
-    return this.http.post<ApiResponse<string>>(
+    return this.http.post<APIResponseBase<string>>(
       `${this.API_LOGIN}/register`,
       {
         ...data,

@@ -10,7 +10,7 @@ import { MyCarCreateDto } from '../../models/myCarCreateDto';
 import { MyCarUpdateDto } from '../../models/MyCarUpdateDto';
 
 import { VehicleType } from '../../models/vehicle-type';
-import { ApiResponse } from '../../../services/auth.service';
+import { APIResponseBase } from '../../../_shared/interfaces/api.response.base';
 
 @Injectable({
   providedIn: 'root'
@@ -54,14 +54,14 @@ export class VehicleService {
 
   getAll(
   type: VehicleType
-): Observable<ApiResponse<MyCarInfo[]>> {
+): Observable<APIResponseBase<MyCarInfo[]>> {
 
   const vehicleType =
     type === VehicleType.Car
       ? 'Car'
       : 'Truck';
 
-  return this.http.get<ApiResponse<MyCarInfo[]>>(
+  return this.http.get<APIResponseBase<MyCarInfo[]>>(
     `${this.apiUrl}?type=${vehicleType}`
   );
 }

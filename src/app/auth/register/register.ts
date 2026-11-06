@@ -12,7 +12,8 @@ import { EMPTY } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { NotificationService } from '../../shared/services/notification';
-import { ApiResponse, AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
+import { APIResponseBase } from '../../../_shared/interfaces/api.response.base';
 
 @Component({
   selector: 'app-register',
@@ -38,7 +39,7 @@ export class RegisterComponent {
   private submitSignal = signal<any | null>(null);
 
   // convert Observable → Signal
-  registerResult = toSignal<ApiResponse<string>>(
+  registerResult = toSignal<APIResponseBase<string>>(
     toObservable(this.submitSignal).pipe(
       switchMap(data => data ? this.auth.register(data) : EMPTY)
     ),
